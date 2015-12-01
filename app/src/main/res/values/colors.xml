@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#045391</color>
+    <color name="colorPrimaryDark">@color/SEMFblue</color>
+    <color name="colorAccent">@color/SEMFyellow</color>
+
+
+    <!--  SEMF default colors  -->
+    <color name="SEMFblue">#00355F</color>
+    <color name="SEMFyellow">#F0AA1F</color>
+    <color name="SEMFdark_iron">#323232</color>
+    <color name="SEMFlight_iron">#6E6E5F</color>
+    <color name="SEMFice_blue">#F5F5F5</color>
+
+</resources>

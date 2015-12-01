@@ -1,0 +1,65 @@
+* {
+	font-family: "Arial Narrow";
+	margin: 0px;
+	color: #323232;
+}
+
+#logo_header {
+	width: 550px;
+}
+
+#page_info {
+	width: 150px;
+	text-align: right;
+	vertical-align: bottom;
+}
+
+#logo_img {
+	width: 70px;
+}
+
+p {
+	color: #323232;
+	font-size: 10pt;
+	padding-top: 3px;
+}
+
+.line {
+	height: 1px;
+	background-color: #9999aa;
+}
+
+#heading {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+.main {
+	padding:15px;
+}
+
+h4{
+	margin-top: 10px;
+	margin-bottom: 8px;
+	font-family: "Arial Narrow";
+	font-weight: normal;
+	color: #00355F;
+}
+
+h3 {
+	color: #F0AA1F
+}
+
+li {
+	list-style-type: none;
+}
+
+.question {
+	margin-top: 10px;
+	margin-bottom: 8px;
+	padding-bottom:10px;
+	font-family: "Arial Narrow";
+	font-weight: normal;
+	color: #00355F;
+	font-size: 16px;
+}

@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name">SEMF</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_user_profile">userProfileActivity</string>
+    <string name="title_activity_take_5">Take 5</string>
+    <string name="title_activity_take5">Take5Activity</string>
+
+    <!-- HOME -->
+    <string name="home_protect">\u2022 PROTECT PLAN</string>
+    <string name="home_take5">\u2022 TAKE 5</string>
+    <string name="home_hazard">\u2022 HAZARD ID</string>
+    <string name="home_incident">\u2022 INCIDENT</string>
+    <string name="home_site_inctruct">\u2022 SITE INSTRUCTION</string>
+    <string name="home_non_conform">\u2022 NON CONFORMANCE</string>
+
+    <!-- USER PROFILE -->
+    <string name="up_name">Name</string>
+    <string name="up_contact_num">Contact Number</string>
+    <string name="up_email">Email</string>
+    <string name="up_sup_name">Supervisor Name</string>
+    <string name="up_sup_email">Supervisor Email</string>
+    <string name="up_cc_hazard">Email CC for Hazard</string>
+    <string name="up_cc_incident">Email CC for Incident</string>
+    <string name="up_cc_protect">Email CC for Protect Plan</string>
+    <string name="up_cc_take5">Email CC for Take 5</string>
+    <string name="title_activity_protect_plan">protectPlanActivity</string>
+
+    <!-- Protect Plan -->
+    <string name="protect_plan_q1">Q) What am I planning to do?</string>
+    <string name="protect_plan_q2">Q) Who does this effect?</string>
+    <string name="protect_plan_q3">Q) What could go wrong?</string>
+    <string name="protect_plan_q4">Q) How could this be prevented?</string>
+    <string name="protect_plan_q5">Q) If risk eventuates, how can I limit the ramifications</string>
+
+    <!-- Hazard ID -->
+    <string name="hazard_id_associated_job">Q) Is hazard associated with a job?</string>
+    <string name="hazard_id_job_number">Q) Job Number</string>
+    <string name="hazard_id_site_location">Q) Site Location</string>
+    <string name="hazard_id_hazard_observed">Q) Hazard Observed</string>
+    <string name="hazard_id_limit_ramifications">Q) What have you done to reduce likelihood of occurence
+                or limit ramifications?</string>
+    <string name="hazard_id_resolution">Q) Who have you reported this to for resolution?</string>
+    <string name="hazard_id_include_picture">Attach Image</string>
+    <string name="title_activity_non_comformance">Non-Comformance</string>
+
+    <!-- NON CONFORMANCE + SITE INSTRUCTION-->
+    <string name="non_conformance_associated_job">Q) Is Non-conformance associated with a job?</string>
+    <string name="site_instruction_associated_job">Q) Is Site Instruction associated with a job?</string>
+    <string name="job_number">Q) Job Number</string>
+    <string name="site">Q) Site</string>
+    <string name="site_location">Q) Location on site</string>
+    <string name="recipient">Q) Recipient</string>
+    <string name="recipient_email">Q) Recipient email</string>
+    <string name="description">Q) Description</string>
+    <string name="non_conformance_actions">Q) Actions</string>
+
+
+</resources>

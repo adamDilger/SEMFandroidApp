@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/button_layout"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <Button
+            android:layout_weight="1"
+            android:id="@+id/take_picture_button"
+            android:text="Take Picture"
+            android:drawableLeft="@android:drawable/ic_menu_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+        <Button
+            android:layout_weight="1"
+            android:id="@+id/save_pdf_button"
+            android:text="Save Pdf"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_toRightOf="@+id/button_layout"
+        android:id="@+id/tv"
+        android:text="@string/hazard_id_include_picture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_toRightOf="@+id/button_layout"
+        android:id="@+id/recycler_view"
+        android:layout_below="@id/tv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    </android.support.v7.widget.RecyclerView>
+</RelativeLayout>

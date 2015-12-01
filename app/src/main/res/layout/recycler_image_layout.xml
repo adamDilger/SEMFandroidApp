@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp">
+    <ImageView
+        android:background="@color/SEMFlight_iron"
+        android:id="@+id/list_item_image"
+        android:layout_width="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_height="250dp" />
+    <TextView
+        style="@android:style/TextAppearance.Small"
+        android:layout_below="@id/list_item_image"
+        android:layout_centerHorizontal="true"
+        android:text="TEXT"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/list_item_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/list_item_delete_button"
+        android:layout_alignRight="@id/list_item_image"
+        style="@android:style/Widget.ActionButton"
+        android:background="@android:drawable/ic_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+</RelativeLayout>
