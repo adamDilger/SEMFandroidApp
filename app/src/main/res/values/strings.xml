@@ -13,6 +13,8 @@
     <string name="home_site_inctruct">\u2022 SITE INSTRUCTION</string>
     <string name="home_non_conform">\u2022 NON CONFORMANCE</string>
 
+    <string name="source_link">https://github.com/adamDilger/SEMFandroidApp</string>
+
     <!-- USER PROFILE -->
     <string name="up_name">Name</string>
     <string name="up_contact_num">Contact Number</string>

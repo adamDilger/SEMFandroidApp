@@ -17,8 +17,12 @@ You should have received a copy of the GNU Affero General Public License along w
 
 package com.semfapp.adamdilger.semf;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -104,6 +108,11 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        if (id == R.id.menu_more_info) {
+            DialogFragment dialog = new MoreInfoDialog();
+            dialog.show(getSupportFragmentManager(), "tag");
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -113,5 +122,30 @@ public class MainActivity extends AppCompatActivity {
 
         HazardIdData.getInstance().exitDelete();
         SiteInstructionData.getInstance().exitDelete();
+    }
+
+    public static class MoreInfoDialog extends DialogFragment
+    {
+        public MoreInfoDialog()
+        {
+
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState)
+        {
+
+            View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_more_info);
+
+            return new AlertDialog.Builder(getActivity())
+                    .setView(v)
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            getDialog().dismiss();
+                        }
+                    })
+                    .create();
+        }
     }
 }

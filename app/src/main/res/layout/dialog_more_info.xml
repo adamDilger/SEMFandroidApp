@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        style="@style/Base.TextAppearance.AppCompat.Large"
+        android:text="Source code:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+            android:text="@string/source_link"
+            android:autoLink="web"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/edit_text"/>
+    <TextView
+        style="@android:style/TextAppearance.Small"
+        android:paddingTop="10dp"
+        android:text="This application uses iText v5.5.7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>
