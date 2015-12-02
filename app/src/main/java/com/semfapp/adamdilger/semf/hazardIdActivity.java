@@ -1,31 +1,38 @@
+/*
+
+Copyright (C) 2015  Adam Dilger
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU
+    Affero General Public License as published by the Free Software Foundation, either version 3 of
+    the License, or (at your option) any later version. 
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+    without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License along with this program.
+    If not, see <http://www.gnu.org/licenses/>.
+
+ */
 package com.semfapp.adamdilger.semf;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class hazardIdActivity extends AppCompatActivity implements Communicator {
 
@@ -103,7 +110,7 @@ public class hazardIdActivity extends AppCompatActivity implements Communicator 
     }
 
     @Override
-    public void addNewImage(File image){
+    public void addNewImage(File image) {
         data.addImage(image);
     }
 
@@ -135,6 +142,7 @@ public class hazardIdActivity extends AppCompatActivity implements Communicator 
 
         Pdf pdf = new Pdf();
         pdfAttatchment = pdf.createPDF(getApplicationContext(), documentTemplate.html(), "Hazard ID", data.getImageArray());
+        pdfAttatchment.deleteOnExit();
 
         /*
         Uri uri = Uri.fromFile(pdfAttatchment);

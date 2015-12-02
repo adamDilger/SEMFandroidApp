@@ -1,17 +1,33 @@
+/*
+
+Copyright (C) 2015  Adam Dilger
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU
+    Affero General Public License as published by the Free Software Foundation, either version 3 of
+    the License, or (at your option) any later version. 
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+    without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License along with this program.
+    If not, see <http://www.gnu.org/licenses/>.
+
+ */
+
 package com.semfapp.adamdilger.semf;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.semfapp.adamdilger.semf.Take5Data.CheckBoxData;
 
 import java.util.ArrayList;
