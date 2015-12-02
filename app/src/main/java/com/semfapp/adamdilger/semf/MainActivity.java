@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.menu_more_info) {
             DialogFragment dialog = new MoreInfoDialog();
             dialog.show(getSupportFragmentManager(), "tag");
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -135,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         public Dialog onCreateDialog(Bundle savedInstanceState)
         {
 
-            View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_more_info);
+            View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_more_info, null);
 
             return new AlertDialog.Builder(getActivity())
                     .setView(v)

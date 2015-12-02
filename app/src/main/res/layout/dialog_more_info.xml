@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="10dp">
     <TextView
-        style="@style/Base.TextAppearance.AppCompat.Large"
         android:text="Source code:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <TextView
+            style="@android:style/TextAppearance.Small"
             android:text="@string/source_link"
             android:autoLink="web"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:drawable/edit_text"/>
+            android:background="@android:drawable/editbox_background"/>
     <TextView
         style="@android:style/TextAppearance.Small"
         android:paddingTop="10dp"
