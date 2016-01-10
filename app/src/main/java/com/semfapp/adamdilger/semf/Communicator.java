@@ -25,5 +25,6 @@ import java.io.File;
 public interface Communicator {
     void saveText(String text, int code);
     void addNewImage(File image);
+    void finishedCreatingPdf();
 }
 

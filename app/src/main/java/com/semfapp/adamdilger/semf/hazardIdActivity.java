@@ -16,9 +16,11 @@ You should have received a copy of the GNU Affero General Public License along w
  */
 package com.semfapp.adamdilger.semf;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -26,9 +28,13 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.File;
@@ -39,7 +45,8 @@ public class hazardIdActivity extends AppCompatActivity implements Communicator 
     private ViewPager viewPager;
     private PagerAdapter pagerAdapter;
     private HazardIdData data;
-    public File pdfAttatchment;
+    private InputMethodManager imm;
+    private File pdfAttatchment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +62,30 @@ public class hazardIdActivity extends AppCompatActivity implements Communicator 
         viewPager = (ViewPager) findViewById(R.id.pager);
         pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
+
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (position == 4) {
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        imm = (InputMethodManager)(getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE));
     }
 
-    private class ScreenSlidePagerAdapter extends FragmentPagerAdapter {
+    private class ScreenSlidePagerAdapter extends PagerAdapterTemplate {
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -84,6 +112,19 @@ public class hazardIdActivity extends AppCompatActivity implements Communicator 
         public int getCount() {
             return 5;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, 0, 0, "Submit").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                createPdf();
+                return true;
+            }
+        }).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+        return true;
     }
 
     private QuestionFragment getQuestionFragment(int questionId) {
@@ -114,15 +155,24 @@ public class hazardIdActivity extends AppCompatActivity implements Communicator 
         data.addImage(image);
     }
 
+    @Override
+    public void finishedCreatingPdf() {
+        //create email intent
+        Emailer emailer = new Emailer(getApplicationContext());
+        Intent emailIntent = emailer.emailAttatchmentIntent(Emailer.HAZARD_ID_CODE, pdfAttatchment, null);
+
+        //start email intent
+        startActivityForResult(Intent.createChooser(emailIntent, "Send email..."), Emailer.EMAILER_REQUEST_CODE);
+    }
+
     public void createPdf() {
         Document documentTemplate = Pdf.getTemplate(getApplicationContext(), data.getProjectNumber());
 
         try {
-            Document body = Jsoup.parse(getAssets().open("hazardId.html"), "utf-8", "http://www.example.com");
+            Document body = Jsoup.parse(getAssets().open("hazardIdentification.html"), "utf-8", "http://www.example.com");
 
             Elements lists = body.select(".list_box");          //Lists html Elements
             ArrayList<String[]> arrayList = data.getArray();    //editText string arrays
-
 
             //for each Element in lists, add each bullet from arrayList.string[] as a <p>
             for (int x = 0; x < lists.size(); x++) {
@@ -140,35 +190,20 @@ public class hazardIdActivity extends AppCompatActivity implements Communicator 
 
         }
 
-        Pdf pdf = new Pdf();
-        pdfAttatchment = pdf.createPDF(getApplicationContext(), documentTemplate.html(), "Hazard ID", data.getImageArray());
-        pdfAttatchment.deleteOnExit();
+        String filePath = MainActivity.pdf.createFilePath(this, "Hazard ID");
 
-        /*
-        Uri uri = Uri.fromFile(pdfAttatchment);
+        MainActivity.pdf.createPdfToFile(this, documentTemplate.html(), filePath, null);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("userProfileData", MODE_PRIVATE);
-        String supEmail = sharedPreferences.getString("supEmail", "default");
-        String ccHazard = sharedPreferences.getString("ccHazard", "default");
+        pdfAttatchment = new File(filePath);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        if (uri != null) {
-            Intent emailIntent = new Intent(Intent.ACTION_SEND);
-            emailIntent.setType("text/plain");
-            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {supEmail});
-            emailIntent.putExtra(Intent.EXTRA_CC, new String[] {ccHazard});
-            emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
-
-            startActivity(Intent.createChooser(emailIntent, "Send email..."));
-        } else {
-            Toast.makeText(hazardIdActivity.this, "ERROR", Toast.LENGTH_SHORT).show();
+        if (requestCode == Emailer.EMAILER_REQUEST_CODE
+                && resultCode == RESULT_CANCELED) {
+            finish();
         }
-
-        */
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(pdfAttatchment), "application/pdf");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(intent);
     }
 }

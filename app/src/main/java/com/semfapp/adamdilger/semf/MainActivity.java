@@ -20,7 +20,9 @@ package com.semfapp.adamdilger.semf;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -29,10 +31,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final int PROTECTPLAN = 0;
+    private final int HAZARDID = 1;
+    private final int NONCONFORMANCE = 2;
+    private final int TAKE5 = 3;
+    private final int SITEINSTRUCTION = 4;
+    private final int INCEDENT = 5;
+
     TextView protectPlanText, hazardIdText, nonConformanceText, take5Text, siteInstructionText;
+    public static Date currentDate;
+    public static Pdf pdf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +58,30 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setLogo(R.mipmap.semf_logo_icon);
         setSupportActionBar(toolbar);
 
+
+        //If First Open, open Tutorial Dialog
+        SharedPreferences sharedPreferences = getSharedPreferences(TutorialDialog.TUTORIAL_SHARED_PREF_CODE, MODE_PRIVATE);
+
+        if (sharedPreferences.getBoolean(TutorialDialog.TUTORIAL_BOOLEAN_CODE, false) == false) {
+            TutorialDialog tutorialDialog = new TutorialDialog();
+
+            tutorialDialog.show(getSupportFragmentManager(), "tutTag");
+
+            sharedPreferences.edit().putBoolean(TutorialDialog.TUTORIAL_BOOLEAN_CODE, true).commit();
+        }
+
+        //create date object
+        currentDate = new Date();
+        pdf = new Pdf();
+
         protectPlanText = (TextView)findViewById(R.id.home_button_protect);
         protectPlanText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), protectPlanActivity.class);
-                startActivity(i);
+                if (!checkForUserData(PROTECTPLAN)) {
+                    Intent i = new Intent(getApplicationContext(), protectPlanActivity.class);
+                    startActivity(i);
+                }
             }
         });
 
@@ -55,8 +89,11 @@ public class MainActivity extends AppCompatActivity {
         hazardIdText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), hazardIdActivity.class);
-                startActivity(i);
+                if (!checkForUserData(HAZARDID)) {
+                    Intent i = new Intent(getApplicationContext(), hazardIdActivity.class);
+                    startActivity(i);
+                }
+
             }
         });
 
@@ -64,8 +101,10 @@ public class MainActivity extends AppCompatActivity {
         nonConformanceText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), NonConformanceActivity.class);
-                startActivity(i);
+                if (!checkForUserData(NONCONFORMANCE)) {
+                    Intent i = new Intent(getApplicationContext(), NonConformanceActivity.class);
+                    startActivity(i);
+                }
             }
         });
 
@@ -73,16 +112,20 @@ public class MainActivity extends AppCompatActivity {
         take5Text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), Take5Activity.class);
-                startActivity(i);
+                if (!checkForUserData(TAKE5)) {
+                    Intent i = new Intent(getApplicationContext(), Take5Activity.class);
+                    startActivity(i);
+                }
             }
         });
         siteInstructionText = (TextView)findViewById(R.id.home_button_site_instruct);
         siteInstructionText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), SiteInstructionActivity.class);
-                startActivity(i);
+                if (!checkForUserData(SITEINSTRUCTION)) {
+                    Intent i = new Intent(getApplicationContext(), SiteInstructionActivity.class);
+                    startActivity(i);
+                }
             }
         });
     }
@@ -127,11 +170,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static class MoreInfoDialog extends DialogFragment
     {
-        public MoreInfoDialog()
-        {
-
-        }
-
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState)
         {
@@ -148,5 +186,64 @@ public class MainActivity extends AppCompatActivity {
                     })
                     .create();
         }
+    }
+
+    //checks if CC or supervisor email for form is null. if so, shows Toast
+    private boolean checkForUserData(int code) {
+        String output = "";
+        boolean failed = false;
+
+        SharedPreferences sharedPreferences = getSharedPreferences(userProfileActivity.USER_SETTINGS_SHARED_PREF, MODE_PRIVATE);
+
+
+        switch (code) {
+            case PROTECTPLAN:
+                if (sharedPreferences.getString(userProfileActivity.CC_PROTECT, "") == "" ||
+                        sharedPreferences.getString(userProfileActivity.CC_PROTECT, null) == null) {
+                    failed = true;
+                    output = "Protect Plan";
+                }
+                break;
+            case HAZARDID:
+                if (sharedPreferences.getString(userProfileActivity.CC_HAZARD, "") == "" ||
+                        sharedPreferences.getString(userProfileActivity.CC_HAZARD, null) == null) {
+                    failed = true;
+                    output = "Hazard ID";
+                }
+                break;
+            case TAKE5:
+                if (sharedPreferences.getString(userProfileActivity.CC_TAKE5, "") == "" ||
+                        sharedPreferences.getString(userProfileActivity.CC_TAKE5, null) == null) {
+                    failed = true;
+                    output = "Take 5";
+                }
+                break;
+            case INCEDENT:
+                if (sharedPreferences.getString(userProfileActivity.CC_INCEDENT, "") == "" ||
+                        sharedPreferences.getString(userProfileActivity.CC_INCEDENT, null) == null) {
+                    failed = true;
+                    output = "Incedent Report";
+                }
+                break;
+        }
+
+        if (sharedPreferences.getString(userProfileActivity.SUPERVISOR_EMAIL, "") == "" ||
+                sharedPreferences.getString(userProfileActivity.SUPERVISOR_EMAIL, null) == null) {
+            failed = true;
+
+            if (output == "") {
+                output = "Supervisor Email";
+            } else {
+                output += " and supervisor email";
+            }
+        }
+
+        //if output has changed, one of the values is null
+        if (output != "") {
+            output = String.format("Please update UserData. \nCC email needed for: %s", output);
+            Toast.makeText(getApplicationContext(), output, Toast.LENGTH_LONG).show();
+        }
+
+        return failed;
     }
 }

@@ -4,6 +4,7 @@
     <string name="title_activity_user_profile">userProfileActivity</string>
     <string name="title_activity_take_5">Take 5</string>
     <string name="title_activity_take5">Take5Activity</string>
+    <string name="submit_button">Submit Email</string>
 
     <!-- HOME -->
     <string name="home_protect">\u2022 PROTECT PLAN</string>
@@ -56,5 +57,7 @@
     <string name="description">Q) Description</string>
     <string name="non_conformance_actions">Q) Actions</string>
 
+
+    <string name="tutorial">SEMF Application\n\nStart by saving your details into the user profile screen.\nAfter your data has been saved, click on desired form. Each form has multiple pages that you navigate by swiping accross the screen. \nOnce the form has been filled out, click submit, choose the email application of your choice and send email.</string>
 
 </resources>

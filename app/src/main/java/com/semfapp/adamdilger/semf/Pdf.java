@@ -17,11 +17,15 @@ You should have received a copy of the GNU Affero General Public License along w
 
 package com.semfapp.adamdilger.semf;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.support.annotation.Nullable;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.itextpdf.text.Document;
@@ -56,17 +60,67 @@ import java.util.Date;
  */
 public class Pdf {
 
-    /*
-    * Creates pdf from html given.
-    * @param htmlString html for PDF creation
-    * @param fileName fileName for pdf
-    */
-    public File createPDF(Context application, String htmlString, String fileName, @Nullable ArrayList<ImageFile> images) {
+    Activity activity;
+    String htmlString;
+    String filePath;
+    ArrayList<ImageFile> images;
+
+    // NEW ASYNCTASK METHODS
+
+    public void createPdfToFile(Activity activity,
+                             String htmlString,
+                             String filePath,
+                             @Nullable ArrayList<ImageFile> images) {
+        this.activity = activity;
+        this.htmlString = htmlString;
+        this.images = images;
+        this.filePath = filePath;
+
+        new HtmlPdfConvertTask().execute();
+    }
+
+
+    //Writes pdf to class variable 'filePath'
+    //uses asynctask
+    //calls Communicator.finishedCreatingPdf() when finished
+    private class HtmlPdfConvertTask extends AsyncTask<Void, Void, Void> {
+
+        ProgressDialog progressDialog;
+        Communicator communicator = (Communicator)activity;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(activity);
+            progressDialog.setTitle("Creating PDF");
+            progressDialog.setMessage("Wait while loading...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            createPDFNew(filePath,
+                    htmlString,
+                    images);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+            }
+
+            communicator.finishedCreatingPdf();
+        }
+    }
+
+    private void createPDFNew(String filePath, String htmlString, @Nullable ArrayList<ImageFile> images) {
 
         File file = null;
 
         try {
-            file = new File(application.getExternalFilesDir(null), fileName + ".pdf");
+            file = new File(filePath);
 
             // step 1
             Document document = new Document();
@@ -82,7 +136,7 @@ public class Pdf {
 
             // CSS
             CSSResolver cssResolver = new StyleAttrCSSResolver();
-            CssFile cssFile = XMLWorkerHelper.getCSS(application.getAssets().open("styles.css"));
+            CssFile cssFile = XMLWorkerHelper.getCSS(activity.getAssets().open("styles.css"));
             cssResolver.addCss(cssFile);
 
             // HTML
@@ -100,7 +154,7 @@ public class Pdf {
             XMLParser p = new XMLParser(worker);
 
 
-            Drawable d = application.getResources().getDrawable(R.drawable.logo_icon);
+            Drawable d = activity.getResources().getDrawable(R.drawable.logo_icon);
             Bitmap bitmap = ((BitmapDrawable) d).getBitmap();
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -114,11 +168,15 @@ public class Pdf {
             p.parse(new ByteArrayInputStream(htmlString.getBytes(StandardCharsets.UTF_8)));
 
             if (images != null) {
+                System.out.println("Adding IMage");
+
                 for (int x = 0; x < images.size(); x++) {
                     Image cursor = images.get(x).getImage();
 
-                    float imgWidth = document.getPageSize().getWidth() - 150;
-                    float imgHeight = document.getPageSize().getHeight() - 150;
+                    float ratio = cursor.getPlainHeight() / cursor.getPlainWidth();
+
+                    float imgWidth = document.getPageSize().getWidth() - 100;
+                    float imgHeight = document.getPageSize().getHeight() - 100;
 
 
                     cursor.scaleToFit(new Rectangle(imgWidth, imgHeight));
@@ -133,11 +191,13 @@ public class Pdf {
 
 
         } catch (Exception e) {
-            Toast.makeText(application.getApplicationContext(), "Error: " + e.toString(), Toast.LENGTH_SHORT).show();
-            System.out.println("Error: " + e.toString());
+            e.printStackTrace();
         }
+    }
 
-        return file;
+    public String createFilePath(Activity activity, String fileName) {
+        File file = new File(activity.getExternalFilesDir(null), fileName + ".pdf");
+        return file.getPath();
     }
 
     public static org.jsoup.nodes.Document getTemplate(Context context, @Nullable String jobNumber) {
@@ -148,9 +208,7 @@ public class Pdf {
             System.out.println("ERROR: " + e.toString());
         }
 
-        System.out.printf("JobNum: " + jobNumber);
-
-        String date = "Date: " + new SimpleDateFormat("d MMM yyyy").format(new Date());
+        String date = "Date: " + new SimpleDateFormat("d MMM yyyy").format(MainActivity.currentDate);
         documentTemplate.getElementById("date").text(date);
 
         if (jobNumber != "" && jobNumber != null) {

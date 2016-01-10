@@ -1,7 +1,12 @@
 * {
-	font-family: "Arial Narrow";
-	margin: 0px;
+	font-family: "Helvetica";
+    margin: 0px;
 	color: #323232;
+}
+
+body {
+    padding-left:20px;
+    padding-top:25px;
 }
 
 #logo_header {
@@ -11,7 +16,7 @@
 #page_info {
 	width: 150px;
 	text-align: right;
-	vertical-align: bottom;
+    vertical-align: bottom;
 }
 
 #logo_img {
@@ -41,13 +46,13 @@ p {
 h4{
 	margin-top: 10px;
 	margin-bottom: 8px;
-	font-family: "Arial Narrow";
 	font-weight: normal;
 	color: #00355F;
 }
 
 h3 {
-	color: #F0AA1F
+    color: #F0AA1F;
+    font-weight: normal;
 }
 
 li {
@@ -58,8 +63,12 @@ li {
 	margin-top: 10px;
 	margin-bottom: 8px;
 	padding-bottom:10px;
-	font-family: "Arial Narrow";
 	font-weight: normal;
 	color: #00355F;
 	font-size: 16px;
+}
+
+.h4_subheading {
+    display: inline-block;
+    padding-right: 10px
 }

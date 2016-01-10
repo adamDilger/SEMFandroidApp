@@ -58,7 +58,6 @@ public class ImageViewerAdapter extends RecyclerView.Adapter<ImageViewerAdapter.
         final int pos = position;   //has to be final for some reason
 
         holder.imageView.setImageBitmap(current.getBitmap());
-        holder.textView.setText("Image: " + current.getName());
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,7 +98,6 @@ public class ImageViewerAdapter extends RecyclerView.Adapter<ImageViewerAdapter.
             super(itemView);
             deleteButton = (Button)itemView.findViewById(R.id.list_item_delete_button);
             imageView = (ImageView)itemView.findViewById(R.id.list_item_image);
-            textView = (TextView)itemView.findViewById(R.id.list_item_text_view);
         }
     }
 }

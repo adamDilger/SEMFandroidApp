@@ -17,6 +17,8 @@ You should have received a copy of the GNU Affero General Public License along w
 
 package com.semfapp.adamdilger.semf;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +29,19 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class userProfileActivity extends AppCompatActivity {
+
+    public static String USER_SETTINGS_SHARED_PREF = "userProfileData";
+    public static String NAME = "name";
+    public static String CONTACT_NUM = "contactNum";
+    public static String EMAIL = "email";
+    public static String SUPERVISOR_NAME = "supName";
+    public static String SUPERVISOR_EMAIL = "supEmail";
+    public static String CC_HAZARD = "ccHazard";
+    public static String CC_INCEDENT = "ccIncedent";
+    public static String CC_PROTECT = "ccProtect";
+    public static String CC_TAKE5 = "ccTake5";
+
+
 
     EditText name, contactNum, email, supName, supEmail, ccHazard, ccIncedent, ccProtect, ccTake5;
     Button saveSettingButton, clearSettingsButton;
@@ -40,7 +55,7 @@ public class userProfileActivity extends AppCompatActivity {
         toolbar.setTitle("User Profile Settings");
         setSupportActionBar(toolbar);
 
-        final SharedPreferences sharedPreferences = getSharedPreferences("userProfileData", MODE_PRIVATE);
+        final SharedPreferences sharedPreferences = getSharedPreferences(USER_SETTINGS_SHARED_PREF, MODE_PRIVATE);
 
 
         //Create EditText fields
@@ -57,15 +72,15 @@ public class userProfileActivity extends AppCompatActivity {
         ccTake5 = (EditText)findViewById(R.id.up_text_cc_take5);
 
         //set Text to values in SharedPreferences
-        name.setText(sharedPreferences.getString("name", ""));
-        contactNum.setText(sharedPreferences.getString("contactNum",""));
-        email.setText(sharedPreferences.getString("email",""));
-        supName.setText(sharedPreferences.getString("supName",""));
-        supEmail.setText(sharedPreferences.getString("supEmail",""));
-        ccHazard.setText(sharedPreferences.getString("ccHazard",""));
-        ccIncedent.setText(sharedPreferences.getString("ccIncedent",""));
-        ccProtect.setText(sharedPreferences.getString("ccProtect",""));
-        ccTake5.setText(sharedPreferences.getString("ccTake5", ""));
+        name.setText(sharedPreferences.getString(NAME, ""));
+        contactNum.setText(sharedPreferences.getString(CONTACT_NUM,""));
+        email.setText(sharedPreferences.getString(EMAIL,""));
+        supName.setText(sharedPreferences.getString(SUPERVISOR_NAME,""));
+        supEmail.setText(sharedPreferences.getString(SUPERVISOR_EMAIL,""));
+        ccHazard.setText(sharedPreferences.getString(CC_HAZARD,""));
+        ccIncedent.setText(sharedPreferences.getString(CC_INCEDENT,""));
+        ccProtect.setText(sharedPreferences.getString(CC_PROTECT,""));
+        ccTake5.setText(sharedPreferences.getString(CC_TAKE5, ""));
 
 
         //Button Saves new values to SharedPreferences
@@ -74,15 +89,15 @@ public class userProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                editor.putString("name", name.getText().toString());
-                editor.putString("contactNum", contactNum.getText().toString());
-                editor.putString("email", email.getText().toString());
-                editor.putString("supName", supName.getText().toString());
-                editor.putString("supEmail", supEmail.getText().toString());
-                editor.putString("ccHazard", ccHazard.getText().toString());
-                editor.putString("ccIncedent", ccIncedent.getText().toString());
-                editor.putString("ccProtect", ccProtect.getText().toString());
-                editor.putString("ccTake5", ccTake5.getText().toString());
+                editor.putString(NAME, name.getText().toString());
+                editor.putString(CONTACT_NUM, contactNum.getText().toString());
+                editor.putString(EMAIL, email.getText().toString());
+                editor.putString(SUPERVISOR_NAME, supName.getText().toString());
+                editor.putString(SUPERVISOR_EMAIL, supEmail.getText().toString());
+                editor.putString(CC_HAZARD, ccHazard.getText().toString());
+                editor.putString(CC_INCEDENT, ccIncedent.getText().toString());
+                editor.putString(CC_PROTECT, ccProtect.getText().toString());
+                editor.putString(CC_TAKE5, ccTake5.getText().toString());
 
                 editor.commit();
 
@@ -95,31 +110,49 @@ public class userProfileActivity extends AppCompatActivity {
         clearSettingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+                AlertDialog.Builder builder = new AlertDialog.Builder(userProfileActivity.this);
+                builder.setMessage("Are you sure you want to clear all user data?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                editor.remove("name");
-                editor.remove("contactNum");
-                editor.remove("email");
-                editor.remove("supName");
-                editor.remove("supEmail");
-                editor.remove("ccHazard");
-                editor.remove("ccIncedent");
-                editor.remove("ccProtect");
-                editor.remove("ccTake5");
+                        editor.remove(NAME);
+                        editor.remove(CONTACT_NUM);
+                        editor.remove(EMAIL);
+                        editor.remove(SUPERVISOR_NAME);
+                        editor.remove(SUPERVISOR_EMAIL);
+                        editor.remove(CC_HAZARD);
+                        editor.remove(CC_INCEDENT);
+                        editor.remove(CC_PROTECT);
+                        editor.remove(CC_TAKE5);
 
-                editor.commit();
+                        editor.commit();
 
-                name.setText("");
-                contactNum.setText("");
-                email.setText("");
-                supName.setText("");
-                supEmail.setText("");
-                ccHazard.setText("");
-                ccIncedent.setText("");
-                ccProtect.setText("");
-                ccTake5.setText("");
+                        name.setText("");
+                        contactNum.setText("");
+                        email.setText("");
+                        supName.setText("");
+                        supEmail.setText("");
+                        ccHazard.setText("");
+                        ccIncedent.setText("");
+                        ccProtect.setText("");
+                        ccTake5.setText("");
 
-                Toast.makeText(getApplicationContext(), "User Settings Cleared", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+
+                        Toast.makeText(getApplicationContext(), "User Settings Cleared", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
     }

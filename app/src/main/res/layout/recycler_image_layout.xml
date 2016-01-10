@@ -6,19 +6,11 @@
     android:padding="5dp">
     <ImageView
         android:background="@color/SEMFlight_iron"
+        android:padding="5dp"
         android:id="@+id/list_item_image"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_height="250dp" />
-    <TextView
-        style="@android:style/TextAppearance.Small"
-        android:layout_below="@id/list_item_image"
-        android:layout_centerHorizontal="true"
-        android:text="TEXT"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/list_item_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
     <Button
         android:id="@+id/list_item_delete_button"
         android:layout_alignRight="@id/list_item_image"

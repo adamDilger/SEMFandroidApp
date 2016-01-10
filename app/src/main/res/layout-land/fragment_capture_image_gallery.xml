@@ -21,7 +21,7 @@
         <Button
             android:layout_weight="1"
             android:id="@+id/save_pdf_button"
-            android:text="Save Pdf"
+            android:text="@string/submit_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>

@@ -24,7 +24,9 @@ import android.media.ExifInterface;
 
 import com.itextpdf.text.Image;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 
 /**
  * Created by adamdilger on 20/11/2015.
@@ -34,18 +36,10 @@ public class ImageFile {
     File imageFile;
     Image image;
     Bitmap thumbnail;
-    String name;
 
     public ImageFile(File file) {
+
         imageFile = file;
-
-        try {
-            ExifInterface exifInterface = new ExifInterface(file.getPath());
-
-            exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-        } catch (Exception r) {}
-
-        name = file.getName();
 
         image = null;
         thumbnail = null;
@@ -61,15 +55,18 @@ public class ImageFile {
             try {
                 String path = imageFile.getPath();
 
-                image = Image.getInstance(path);
+                Bitmap bmp = getBitmapForPdf(500, 500);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+
+
+                image = Image.getInstance(byteArray);
+//                image = Image.getInstance(path);
             } catch (Exception e) {}
         }
 
         return image;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public Bitmap getBitmap() {
@@ -95,8 +92,8 @@ public class ImageFile {
 
             } catch (Exception r) {}
 
-            float destWidth = 480;
-            float destHeight = 800;
+            float destWidth = 320;
+            float destHeight = 480;
             // Read in the dimensions of the image on disk
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
@@ -120,5 +117,36 @@ public class ImageFile {
         }
 
         return thumbnail;
+    }
+
+    private Bitmap getBitmapForPdf(int width, int height) {
+        Bitmap outputBmp;
+
+            String filePath = imageFile.getPath();
+
+            float destWidth = width;
+            float destHeight = height;
+            // Read in the dimensions of the image on disk
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(filePath, options);
+            float srcWidth = options.outWidth;
+            float srcHeight = options.outHeight;
+            int inSampleSize = 1;
+            if (srcHeight > destHeight || srcWidth > destWidth) {
+                if (srcWidth > srcHeight) {
+                    inSampleSize = Math.round(srcHeight / destHeight);
+                } else {
+                    inSampleSize = Math.round(srcWidth / destWidth);
+                }
+            }
+            options = new BitmapFactory.Options();
+            options.inSampleSize = inSampleSize;
+
+            Bitmap b = BitmapFactory.decodeFile(filePath, options);
+
+        outputBmp = Bitmap.createBitmap(b, 0,0,b.getWidth(), b.getHeight());
+
+        return outputBmp;
     }
 }

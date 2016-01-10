@@ -30,6 +30,8 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
@@ -43,7 +45,7 @@ public class Take5Activity extends AppCompatActivity {
     private ViewPager viewPager;
     private PagerAdapter pagerAdapter;
     private Take5PdfDocument pdfDocument;
-    private File file;
+    private File pdfAttatchment;
     private InputMethodManager imm;
 
 
@@ -84,7 +86,20 @@ public class Take5Activity extends AppCompatActivity {
         imm = (InputMethodManager)(getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE));
     }
 
-    private class ScreenSlidePagerAdapter extends FragmentPagerAdapter {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, 0, 0, "Submit").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                createPdf();
+                return true;
+            }
+        }).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+        return true;
+    }
+
+    private class ScreenSlidePagerAdapter extends PagerAdapterTemplate {
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -117,20 +132,17 @@ public class Take5Activity extends AppCompatActivity {
         PdfDocument document = pdfDocument.createDocument();
 
         // write the document
-        String date = new SimpleDateFormat("dd-MM-yy").format(new Date());
-        file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), date + " SWMS.pdf");
+        String date = new SimpleDateFormat("dd-MM-yy").format(MainActivity.currentDate);
+        pdfAttatchment = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), date + " SWMS.pdf");
 
         FileOutputStream fos;
 
         try {
-            file.createNewFile();
-            fos = new FileOutputStream(file);
+            pdfAttatchment.createNewFile();
+            fos = new FileOutputStream(pdfAttatchment);
             document.writeTo(fos);
             document.close();
             fos.close();
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.parse("file://" + file), "application/pdf");
-            startActivity(intent);
         } catch (Exception e) {
             new Toast(getApplicationContext())
                     .makeText(getApplicationContext(),
@@ -138,16 +150,33 @@ public class Take5Activity extends AppCompatActivity {
                             Toast.LENGTH_SHORT)
                     .show();
         }
+
+        //create email intent
+        Emailer emailer = new Emailer(getApplicationContext());
+        Intent emailIntent = emailer.emailAttatchmentIntent(Emailer.TAKE_5_CODE, pdfAttatchment, null);
+
+        //start email intent
+        startActivityForResult(Intent.createChooser(emailIntent, "Send email..."), Emailer.EMAILER_REQUEST_CODE);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
-        if (file != null) {
-            file.delete();
+        if (pdfAttatchment != null) {
+            pdfAttatchment.delete();
         }
         pdfDocument = null;
         Take5Data.exitDelete();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Emailer.EMAILER_REQUEST_CODE
+                && resultCode == RESULT_CANCELED) {
+            finish();
+        }
     }
 }

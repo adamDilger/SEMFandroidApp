@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="false">
+        <LinearLayout
+            android:background="#e6e6e6"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:textSize="16sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Start by saving your details into the user profile screen, found here."
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp" />
+            <ImageView
+
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:src="@drawable/tut_screenshot" />
+
+            <TextView
+                android:textSize="16sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="After your data has been saved, click on desired form. Each form has multiple pages that you navigate by swiping across the screen."
+                android:paddingTop="10dp" />
+            <TextView
+                android:textSize="16sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Once the form has been filled out, click submit, choose the email application of your choice and send email."
+                android:paddingTop="10dp" />
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

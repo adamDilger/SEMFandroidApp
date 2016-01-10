@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -28,6 +29,8 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 
 import org.jsoup.Jsoup;
@@ -65,7 +68,7 @@ public class SiteInstructionActivity extends AppCompatActivity implements Commun
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if (position == 2){
+                if (position == 2) {
                     imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 }
             }
@@ -84,7 +87,20 @@ public class SiteInstructionActivity extends AppCompatActivity implements Commun
         imm = (InputMethodManager)(getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE));
     }
 
-    private class ScreenSlidePagerAdapter extends FragmentPagerAdapter {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, 0, 0, "Submit").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                createPdf();
+                return true;
+            }
+        }).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+        return true;
+    }
+
+    private class ScreenSlidePagerAdapter extends PagerAdapterTemplate {
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -131,6 +147,16 @@ public class SiteInstructionActivity extends AppCompatActivity implements Commun
         data.addImage(image);
     }
 
+    @Override
+    public void finishedCreatingPdf() {
+        //create email intent
+        Emailer emailer = new Emailer(getApplicationContext());
+        Intent emailIntent = emailer.emailAttatchmentIntent(Emailer.SITE_INSTRUCTION_CODE, pdfAttatchment, data.getRecipientEmail());
+
+        //start email intent
+        startActivityForResult(Intent.createChooser(emailIntent, "Send email..."), Emailer.EMAILER_REQUEST_CODE);
+    }
+
     public void createPdf() {
         Document documentTemplate = Pdf.getTemplate(getApplicationContext(), data.getJobNumber());
         try {
@@ -166,36 +192,21 @@ public class SiteInstructionActivity extends AppCompatActivity implements Commun
             System.out.println("ERROR: " + e.toString());
         }
 
+        String filePath = MainActivity.pdf.createFilePath(this, "Site Instruction");
 
-        Pdf pdf = new Pdf();
-        pdfAttatchment = pdf.createPDF(getApplicationContext(), documentTemplate.html(), "Site Instruction", data.getImageArray());
-        pdfAttatchment.deleteOnExit();
+        MainActivity.pdf.createPdfToFile(this, documentTemplate.html(), filePath, data.getImageArray());
 
-        /*
-        Uri uri = Uri.fromFile(pdfAttatchment);
-
-        SharedPreferences sharedPreferences = getSharedPreferences("userProfileData", MODE_PRIVATE);
-        String supEmail = sharedPreferences.getString("supEmail", "default");
-        String ccHazard = sharedPreferences.getString("ccSiteInstruction", "default");
-
-
-        if (uri != null) {
-            Intent emailIntent = new Intent(Intent.ACTION_SEND);
-            emailIntent.setType("text/plain");
-            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {supEmail});
-            emailIntent.putExtra(Intent.EXTRA_CC, new String[] {ccHazard});
-            emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
-
-            startActivity(Intent.createChooser(emailIntent, "Send email..."));
-        } else {
-            Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT).show();
-        }
-
-        */
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(pdfAttatchment), "application/pdf");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(intent);
+        pdfAttatchment = new File(filePath);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Emailer.EMAILER_REQUEST_CODE
+                && resultCode == RESULT_CANCELED) {
+            finish();
+        }
+    }
+
 }

@@ -12,7 +12,7 @@
     <Button
         android:layout_alignParentBottom="true"
         android:id="@+id/save_pdf_button"
-        android:text="Save Pdf"
+        android:text="@string/submit_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <Button

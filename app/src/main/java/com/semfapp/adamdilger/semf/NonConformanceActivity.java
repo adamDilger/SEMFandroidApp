@@ -27,6 +27,8 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 
 import org.jsoup.Jsoup;
@@ -41,6 +43,7 @@ public class NonConformanceActivity extends AppCompatActivity implements Communi
     private PagerAdapter pagerAdapter;
     private NonConformanceData data;
     private InputMethodManager imm;
+    private File pdfAttatchment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +61,20 @@ public class NonConformanceActivity extends AppCompatActivity implements Communi
         viewPager.setAdapter(pagerAdapter);
     }
 
-    private class ScreenSlidePagerAdapter extends FragmentPagerAdapter {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, 0, 0, "Submit").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                createPdf();
+                return true;
+            }
+        }).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+        return true;
+    }
+
+    private class ScreenSlidePagerAdapter extends PagerAdapterTemplate {
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -105,6 +121,16 @@ public class NonConformanceActivity extends AppCompatActivity implements Communi
 
     @Override
     public void addNewImage(File image){}
+
+    @Override
+    public void finishedCreatingPdf() {
+        //create email intent
+        Emailer emailer = new Emailer(getApplicationContext());
+        Intent emailIntent = emailer.emailAttatchmentIntent(Emailer.NON_CONFORMANCE_CODE, pdfAttatchment, data.getRecipientEmail());
+
+        //start email intent
+        startActivityForResult(Intent.createChooser(emailIntent, "Send email..."), Emailer.EMAILER_REQUEST_CODE);
+    }
 
     public void createPdf() {
         Document document = Pdf.getTemplate(getApplicationContext(), data.getJobNumber());
@@ -155,12 +181,20 @@ public class NonConformanceActivity extends AppCompatActivity implements Communi
             System.out.println("ERROR: " + e.toString());
         }
 
-        Pdf pdf = new Pdf();
-        File file = pdf.createPDF(getApplicationContext(), document.html(), "Non Conformance", null);
+        String filePath = MainActivity.pdf.createFilePath(this, "Non Conformance");
 
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(file), "application/pdf");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(intent);
+        MainActivity.pdf.createPdfToFile(this, document.html(), filePath, null);
+
+        pdfAttatchment = new File(filePath);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Emailer.EMAILER_REQUEST_CODE
+                && resultCode == RESULT_CANCELED) {
+            finish();
+        }
     }
 }

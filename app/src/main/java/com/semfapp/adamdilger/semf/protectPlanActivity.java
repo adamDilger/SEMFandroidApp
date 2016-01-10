@@ -16,9 +16,7 @@ You should have received a copy of the GNU Affero General Public License along w
  */
 
 package com.semfapp.adamdilger.semf;
-
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,6 +25,9 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -49,6 +50,7 @@ public class protectPlanActivity extends AppCompatActivity implements Communicat
         setContentView(R.layout.activity_protect_plan);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Protect Plan");
+
         setSupportActionBar(toolbar);
 
         data = protectPlanData.getInstance();
@@ -58,7 +60,7 @@ public class protectPlanActivity extends AppCompatActivity implements Communicat
         viewPager.setAdapter(pagerAdapter);
     }
 
-    private class ScreenSlidePagerAdapter extends FragmentPagerAdapter {
+    private class ScreenSlidePagerAdapter extends PagerAdapterTemplate {
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -79,6 +81,19 @@ public class protectPlanActivity extends AppCompatActivity implements Communicat
         public int getCount() {
             return 5;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, 0, 0, "Submit").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                createPdf();
+                return true;
+            }
+        }).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+        return true;
     }
 
     private QuestionFragment getQuestionFragment(int questionId) {
@@ -113,6 +128,16 @@ public class protectPlanActivity extends AppCompatActivity implements Communicat
     @Override
     public void addNewImage(File image) {}
 
+    @Override
+    public void finishedCreatingPdf() {
+        //create email intent
+        Emailer emailer = new Emailer(getApplicationContext());
+        Intent emailIntent = emailer.emailAttatchmentIntent(Emailer.PROTECT_PLAN_CODE, pdfAttatchment, null);
+
+        //start email intent
+        startActivityForResult(Intent.createChooser(emailIntent, "Send email..."), Emailer.EMAILER_REQUEST_CODE);
+    }
+
     public void createPdf() {
         Document documentTemplate = null;
         Element body = null;
@@ -122,7 +147,7 @@ public class protectPlanActivity extends AppCompatActivity implements Communicat
 
             body = Jsoup.parse(getAssets().open("protectPlan.html"), "utf-8", "http://www.example.com");
 
-            Elements lists = body.select(".list_box");      //Lists html Elements
+            Elements lists = body.select(".list_box");          //Lists html Elements
             ArrayList<String[]> arrayList = data.getArray();    //editText string arrays
 
             //for each Element in lists, add each bullet from arrayList.string[] as a <p>
@@ -141,39 +166,27 @@ public class protectPlanActivity extends AppCompatActivity implements Communicat
 
         documentTemplate.getElementById("main").html(body.html());
 
-        Pdf pdf = new Pdf();
-        pdfAttatchment = pdf.createPDF(getApplicationContext(), documentTemplate.html(), "Protect Plan", null);
+        String filePath = MainActivity.pdf.createFilePath(this, "Protect Plan");
 
-        /*
-        Uri uri = Uri.fromFile(pdfAttatchment);
+        MainActivity.pdf.createPdfToFile(this, documentTemplate.html(), filePath, null);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("userProfileData", MODE_PRIVATE);
-        String supEmail = sharedPreferences.getString("supEmail", "default");
-        String ccHazard = sharedPreferences.getString("ccProtect", "default");
+        pdfAttatchment = new File(filePath);
 
-
-        if (uri != null) {
-            Intent emailIntent = new Intent(Intent.ACTION_SEND);
-            emailIntent.setType("text/plain");
-            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {supEmail});
-            emailIntent.putExtra(Intent.EXTRA_CC, new String[] {ccHazard});
-            emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
-
-            startActivity(Intent.createChooser(emailIntent, "Send email..."));
-        } else {
-            Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT).show();
-        }
-        */
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(pdfAttatchment), "application/pdf");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(intent);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         data.exitDelete();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Emailer.EMAILER_REQUEST_CODE
+                && resultCode == RESULT_CANCELED) {
+            finish();
+        }
     }
 }
