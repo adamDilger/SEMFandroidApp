@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                style="@style/incedent_view">
+                <TextView
+                    style="@style/incedent_text_1"
+                    android:text="INCEDENT or NEAR MISS OCCURS" />
+            </LinearLayout>
+
+            <View
+                style="@style/arrow"/>
+
+            <LinearLayout
+                style="@style/incedent_view">
+                <TextView
+                    style="@style/incedent_text_1"
+                    android:text="CHECK FOR DANGER"
+                    />
+                <TextView
+                    style="@style/incedent_text_2"
+                    android:text="TO YOU / TO OTHERS / TO THE CASUALTY"
+                    />
+            </LinearLayout>
+
+            <View
+                style="@style/arrow"/>
+
+            <LinearLayout
+                style="@style/incedent_view">
+                <TextView
+                    style="@style/incedent_text_1"
+                    android:text="CHECK FOR RESPONSE"/>
+                <TextView
+                    style="@style/incedent_text_2"
+                    android:text="IS THE CASUALTY CONSCIOUS?"/>
+            </LinearLayout>
+
+            <View
+                style="@style/arrow"/>
+
+            <LinearLayout
+                style="@style/incedent_view">
+                <TextView
+                    style="@style/incedent_text_1"
+                    android:text="SEND FOR HELP"/>
+                <TextView
+                    style="@style/incedent_text_2"
+                    android:text="CALL 000 OR SITE EMERGENCY NUMBER"/>
+            </LinearLayout>
+
+            <View
+                style="@style/arrow"/>
+
+            <LinearLayout
+                style="@style/incedent_view">
+                <TextView
+                    style="@style/incedent_text_1"
+                    android:text="IF HAZARDS STILL EXIST, IMPLEMENT ITC"/>
+                <TextView
+                    style="@style/incedent_text_2"
+                    android:text="(Immediate Temporary Control)"/>
+            </LinearLayout>
+
+            <View
+                style="@style/arrow"/>
+
+            <LinearLayout
+                style="@style/incedent_view">
+                <TextView
+                    style="@style/incedent_text_1"
+                    android:text="INFORM LINE MANAGER IMMEDIATELY"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

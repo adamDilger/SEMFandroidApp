@@ -58,6 +58,50 @@
     <string name="non_conformance_actions">Q) Actions</string>
 
 
-    <string name="tutorial">SEMF Application\n\nStart by saving your details into the user profile screen.\nAfter your data has been saved, click on desired form. Each form has multiple pages that you navigate by swiping accross the screen. \nOnce the form has been filled out, click submit, choose the email application of your choice and send email.</string>
+    <string name="tutorial">SEMF Application\n\nStart by saving your details into the user
+        profile screen.\nAfter your data has been saved, click on desired form. Each form
+        has multiple pages that you navigate by swiping accross the screen. \nOnce the form
+        has been filled out, click submit, choose the email application of your choice and
+        send email.</string>
+
+    <string name="incident_string1">
+        <![CDATA[a)    There has been a death of a person]]>
+    </string>
+
+    <string name="incident_html2">
+        <![CDATA[
+        <p>b)    There has been a serious injury, illness, immediate treatment; as an in patient in a hospital</p>
+        <ul>
+        <li>for the amputation of any part of the body for a serious head injury for a serious eye injury for a serious burn</li>
+        <li>for the separation of skin from underlying tissue</li>
+        <li>for a spinal injury</li>
+        <li>for the loss of a bodily function</li>
+        <li>for serious lacerations Medical treatment within 48 hours of exposure to a substance.</li>
+        </ul>
+
+        ]]>
+    </string>
+
+    <string name="incident_string3"><![CDATA[c)    There has been a dangerous incident;
+        an uncontrolled escape, spillage or leakage of a substance an uncontrolled implosion,
+        explosion or fire an uncontrolled escape of gas or steam an uncontrolled escape
+        of a pressurised substance electric shock the fall or release from a height of
+        any plant, substance or thing the collapse, overturning, failure or malfunction
+        of, or damage to, any registered plant the collapse or partial collapse of a
+        structure including scaffolding the collapse or failure of an excavation or of
+        any shoring supporting an excavation the inrush of water, mud or gas in workings,
+        in an underground excavation or tunnel, or the interruption of the main system of
+        ventilation in an underground excavation or tunnel. ]]>
+    </string>
+
+    <string name="incident_html4">
+        <![CDATA[
+        <ul>
+            <li>Preserve the site unless actions are required to mitigate immediate further danger</li>
+            <li>Contact your line manager</li>
+            <li>Refer to Incident / Near miss Response procedure</li>
+        </ul>
+        ]]>
+    </string>
 
 </resources>

@@ -22,7 +22,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -33,8 +32,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private final int SITEINSTRUCTION = 4;
     private final int INCEDENT = 5;
 
-    TextView protectPlanText, hazardIdText, nonConformanceText, take5Text, siteInstructionText;
+    TextView protectPlanText, hazardIdText, nonConformanceText, take5Text, siteInstructionText, incedentReport;
     public static Date currentDate;
     public static Pdf pdf;
 
@@ -126,6 +123,14 @@ public class MainActivity extends AppCompatActivity {
                     Intent i = new Intent(getApplicationContext(), SiteInstructionActivity.class);
                     startActivity(i);
                 }
+            }
+        });
+        incedentReport = (TextView)findViewById(R.id.home_button_incident);
+        incedentReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), IncidentReportActivity.class);
+                startActivity(i);
             }
         });
     }
