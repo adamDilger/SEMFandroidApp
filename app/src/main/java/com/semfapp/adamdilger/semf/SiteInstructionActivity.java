@@ -19,18 +19,9 @@ package com.semfapp.adamdilger.semf;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 
 import org.jsoup.Jsoup;
@@ -42,10 +33,8 @@ import java.io.File;
 /**
  * Created by adamdilger on 24/11/2015.
  */
-public class SiteInstructionActivity extends AppCompatActivity implements Communicator {
+public class SiteInstructionActivity extends AbstractTabLayoutFragment implements Communicator {
 
-    private ViewPager viewPager;
-    private PagerAdapter pagerAdapter;
     private SiteInstructionData data;
     private InputMethodManager imm;
     public File pdfAttatchment;
@@ -53,19 +42,10 @@ public class SiteInstructionActivity extends AppCompatActivity implements Commun
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_protect_plan);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Site Instruction");
-        setSupportActionBar(toolbar);
 
         data = SiteInstructionData.getInstance();
 
-
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(pagerAdapter);
-
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        super.getViewPager().setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 if (position == 2) {
@@ -88,49 +68,27 @@ public class SiteInstructionActivity extends AppCompatActivity implements Commun
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, 0, 0, "Submit").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                createPdf();
-                return true;
-            }
-        }).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
-        return true;
+    String setToolbarTitle() {
+        return "Site Instruction";
     }
 
-    private class ScreenSlidePagerAdapter extends PagerAdapterTemplate {
-        public ScreenSlidePagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return new SiteInstructionF1();
-                case 1:
-                    return getQuestionFragment(R.string.description);
-                case 2:
-                    return new SiteInstructionF3();
-                default:
-                    return null;
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
+    @Override
+    Fragment getFragmentAtIndex(int index) {
+        switch (index) {
+            case 0:
+                return new SiteInstructionF1();
+            case 1:
+                return getQuestionFragment(R.string.description);
+            case 2:
+                return new SiteInstructionF3();
+            default:
+                return null;
         }
     }
 
-    private QuestionFragment getQuestionFragment(int questionId) {
-        QuestionFragment qf = new QuestionFragment();
-        Bundle args = new Bundle();
-        args.putInt(QuestionFragment.QUESTION_TEXT_CODE, questionId);
-        qf.setArguments(args);
-        return qf;
+    @Override
+    int getFragmentCount() {
+        return 3;
     }
 
     @Override
@@ -198,15 +156,4 @@ public class SiteInstructionActivity extends AppCompatActivity implements Commun
 
         pdfAttatchment = new File(filePath);
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == Emailer.EMAILER_REQUEST_CODE
-                && resultCode == RESULT_CANCELED) {
-            finish();
-        }
-    }
-
 }

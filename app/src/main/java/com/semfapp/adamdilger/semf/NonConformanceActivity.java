@@ -18,11 +18,9 @@ You should have received a copy of the GNU Affero General Public License along w
 package com.semfapp.adamdilger.semf;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -37,74 +35,40 @@ import org.jsoup.nodes.Element;
 
 import java.io.File;
 
-public class NonConformanceActivity extends AppCompatActivity implements Communicator {
+public class NonConformanceActivity extends AbstractTabLayoutFragment implements Communicator {
 
-    private ViewPager viewPager;
-    private PagerAdapter pagerAdapter;
     private NonConformanceData data;
-    private InputMethodManager imm;
     private File pdfAttatchment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_protect_plan);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Non Conformance");
-        setSupportActionBar(toolbar);
 
         data = NonConformanceData.getInstance();
-
-
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(pagerAdapter);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, 0, 0, "Submit").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                createPdf();
-                return true;
-            }
-        }).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
-        return true;
+    String setToolbarTitle() {
+        return "Non Conformance";
     }
 
-    private class ScreenSlidePagerAdapter extends PagerAdapterTemplate {
-        public ScreenSlidePagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return new NonConformanceF1();
-                case 1:
-                    return getQuestionFragment(R.string.description);
-                case 2:
-                    return new NonConformanceF3();
-                default:
-                    return null;
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
-        }
+    @Override
+    int getFragmentCount() {
+        return 3;
     }
 
-    private QuestionFragment getQuestionFragment(int questionId) {
-        QuestionFragment qf = new QuestionFragment();
-        Bundle args = new Bundle();
-        args.putInt(QuestionFragment.QUESTION_TEXT_CODE, questionId);
-        qf.setArguments(args);
-        return qf;
+    @Override
+    Fragment getFragmentAtIndex(int index) {
+        switch (index) {
+            case 0:
+                return new NonConformanceF1();
+            case 1:
+                return getQuestionFragment(R.string.description);
+            case 2:
+                return new NonConformanceF3();
+            default:
+                return null;
+        }
     }
 
     @Override
@@ -186,15 +150,5 @@ public class NonConformanceActivity extends AppCompatActivity implements Communi
         MainActivity.pdf.createPdfToFile(this, document.html(), filePath, null);
 
         pdfAttatchment = new File(filePath);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == Emailer.EMAILER_REQUEST_CODE
-                && resultCode == RESULT_CANCELED) {
-            finish();
-        }
     }
 }

@@ -2,9 +2,12 @@
     <string name="app_name">SEMF</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_user_profile">userProfileActivity</string>
+    <string name="title_activity_protect_plan">protectPlanActivity</string>
     <string name="title_activity_take_5">Take 5</string>
     <string name="title_activity_take5">Take5Activity</string>
     <string name="submit_button">Submit Email</string>
+
+
 
     <!-- HOME -->
     <string name="home_protect">\u2022 PROTECT PLAN</string>
@@ -26,7 +29,6 @@
     <string name="up_cc_incident">Email CC for Incident</string>
     <string name="up_cc_protect">Email CC for Protect Plan</string>
     <string name="up_cc_take5">Email CC for Take 5</string>
-    <string name="title_activity_protect_plan">protectPlanActivity</string>
 
     <!-- Protect Plan -->
     <string name="protect_plan_q1">Q) What am I planning to do?</string>

@@ -20,54 +20,37 @@ package com.semfapp.adamdilger.semf;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.pdf.PdfDocument;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 
-public class Take5Activity extends AppCompatActivity {
+public class Take5Activity extends AbstractTabLayoutFragment {
 
-    private ViewPager viewPager;
-    private PagerAdapter pagerAdapter;
     private Take5PdfDocument pdfDocument;
     private File pdfAttatchment;
+    private Take5Data data;
     private InputMethodManager imm;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_protect_plan);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Take 5");
-        setSupportActionBar(toolbar);
 
+        data = Take5Data.get(this);
         pdfDocument = new Take5PdfDocument(getApplicationContext());
 
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(pagerAdapter);
-
-
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        super.getViewPager().setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if (position == 1){
+                if (position == 1) {
                     imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 }
             }
@@ -87,44 +70,45 @@ public class Take5Activity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, 0, 0, "Submit").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                createPdf();
-                return true;
-            }
-        }).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
-        return true;
+    String setToolbarTitle() {
+        return "Take 5";
     }
 
-    private class ScreenSlidePagerAdapter extends PagerAdapterTemplate {
-        public ScreenSlidePagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
+    @Override
+    int getFragmentCount() {
+        return 5;
+    }
 
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return new Take5F1();
-                case 1:
-                    return new Take5F2();
-                case 2:
-                    return new Take5F3();
-                case 3:
-                    return new Take5F4();
-                case 4:
-                    return new Take5F5();
-                default:
-                    return null;
-            }
-        }
+    @Override
+    Fragment getFragmentAtIndex(int index) {
+        switch (index) {
+            case 0:
+                return new Take5F1();
+            case 1:
+                Fragment fragment = new Take5RecyclerFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt(Take5RecyclerFragment.ARRAY_IDENTIFIER_CODE, Take5RecyclerFragment.SECTION_ONE_CODE);
+                fragment.setArguments(bundle);
 
-        @Override
-        public int getCount() {
-            return 5;
+                return fragment;
+            case 2:
+                Fragment fragmentTwo = new Take5RecyclerFragment();
+                Bundle bundleTwo = new Bundle();
+                bundleTwo.putInt(Take5RecyclerFragment.ARRAY_IDENTIFIER_CODE, Take5RecyclerFragment.SECTION_TWO_CODE);
+                fragmentTwo.setArguments(bundleTwo);
+
+                return fragmentTwo;
+            case 3:
+                return new Take5F4();
+            case 4:
+                Fragment fragmentThree = new Take5RecyclerFragment();
+                Bundle bundleThree = new Bundle();
+                bundleThree.putInt(Take5RecyclerFragment.ARRAY_IDENTIFIER_CODE, Take5RecyclerFragment.SECTION_THREE_CODE);
+                fragmentThree.setArguments(bundleThree);
+
+                return fragmentThree;
+            default:
+                return null;
         }
     }
 
@@ -133,7 +117,7 @@ public class Take5Activity extends AppCompatActivity {
 
         // write the document
         String date = new SimpleDateFormat("dd-MM-yy").format(MainActivity.currentDate);
-        pdfAttatchment = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), date + " SWMS.pdf");
+        pdfAttatchment = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), date + " Take5.pdf");
 
         FileOutputStream fos;
 
@@ -168,15 +152,5 @@ public class Take5Activity extends AppCompatActivity {
         }
         pdfDocument = null;
         Take5Data.exitDelete();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == Emailer.EMAILER_REQUEST_CODE
-                && resultCode == RESULT_CANCELED) {
-            finish();
-        }
     }
 }

@@ -40,7 +40,7 @@ public class Take5F4 extends ListFragment {
     public final int REQUEST_EDIT_ITEM = 0;
     public final int REQUEST_ADD_ITEM = 1;
 
-
+    Take5Data data;
     ArrayList<Take5RiskElement> mRiskElements;
     Button mAddButton;
 
@@ -48,10 +48,10 @@ public class Take5F4 extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mRiskElements = Take5Data.get(getActivity()).getRiskElements();
+        data = Take5Data.get(getActivity());
+        mRiskElements = data.getRiskElements();
         ListAdapter adapter = new ListAdapter(mRiskElements);
         setListAdapter(adapter);
-
     }
 
     @Override

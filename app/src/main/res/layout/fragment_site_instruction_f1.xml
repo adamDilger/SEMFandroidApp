@@ -82,6 +82,7 @@
                 android:layout_height="wrap_content" />
 
             <EditText
+
                 android:inputType="text"
                 android:id="@+id/site_instruction_recipient_editText"
                 android:layout_width="match_parent"
@@ -93,6 +94,7 @@
                 android:layout_height="wrap_content" />
 
             <EditText
+
                 android:inputType="textEmailAddress"
                 android:id="@+id/site_instruction_recipient_email_editText"
                 android:layout_width="match_parent"

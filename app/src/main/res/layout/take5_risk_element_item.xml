@@ -2,25 +2,72 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-    <TextView
-        android:textSize="16dp"
-        android:id="@+id/list_item_one"
+              android:layout_height="wrap_content"
+              android:gravity="left"
+    >
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
-    <TextView
-        android:textSize="16dp"
-        android:id="@+id/list_item_risk"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1: "
+            />
+        <TextView
+            android:id="@+id/list_item_one"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="asdfadfng sdfg skdf g,fd skdfl gf,d sdfgjkf ndsknd
+            fgasdf dsaf dasdf dsasdf dsasdf dsasdf dsasdf asdf gvcxvb "
 
-        />
-    <TextView
-        android:textSize="16dp"
-        android:id="@+id/list_item_two"
+            />
+    </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2: "
+            android:textColor="#cc0000"
+            />
+        <TextView
+            android:textSize="16dp"
+            android:id="@+id/list_item_risk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HIGH"
+            />
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3: "
+            />
+        <TextView
+            android:id="@+id/list_item_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="asdfadfng sdfg skdf g,fd skdfl gf,d sdfgjkf ndsknd
+            fgasdf dsaf dasdf dsasdf dsasdf dsasdf dsasdf asdf gvcxvb "
+            />
+    </LinearLayout>
 </LinearLayout>

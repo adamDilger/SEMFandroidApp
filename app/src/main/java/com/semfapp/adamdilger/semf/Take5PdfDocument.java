@@ -25,6 +25,10 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
+import android.util.TypedValue;
 import android.widget.TextView;
 
 import com.semfapp.adamdilger.semf.Take5Data.CheckBoxData;
@@ -42,8 +46,11 @@ public class Take5PdfDocument {
     private final int A4_WIDTH = 595;
     private final int A4_HEIGHT = 842;
     private final int BOX_WIDTH = 14;
-    private final float FONT12 = 3.4f;
-    private final float FONT14 = 4f;
+//    private final float FONT12 = 3.4f;
+//    private final float FONT14 = 4f;
+
+    private final float FONT12 = 11;
+    private final float FONT14 = 13;
 
     private Canvas can;
     private Context mContext;
@@ -136,7 +143,7 @@ public class Take5PdfDocument {
         left = 177;
         top = 108;
         for (int x = 0; x < mCheckBoxSectionOne.size(); x++) {
-            boolean isYes = mCheckBoxSectionOne.get(x).isYes();
+            Take5Data.CheckValue isYes = mCheckBoxSectionOne.get(x).getCheckValue();
             float topLoc = top + (x * 33);
 
             if (x < 1) {    //allowing for different 1st row size
@@ -151,12 +158,15 @@ public class Take5PdfDocument {
             }
         }
 
-        drawText(mCheckBoxSectionOne.get(0).getString(),13, 107, FONT12, carlitoBold);
+        DashPathEffect pathEffect = new DashPathEffect(new float[]{1, 1.5f}, 0);
+
+        drawText(mCheckBoxSectionOne.get(0).getHeading(),13, 113, FONT12, carlitoBold);
+
         for (int x = 1; x < mCheckBoxSectionOne.size(); x++) {
-            int height = 127 + ((x - 1) * 33);
-            drawText(mCheckBoxSectionOne.get(x).getString(), 13, height, FONT12, carlitoBold);
-            paint.setPathEffect(new DashPathEffect(new float[]{1, 2}, 0));
-            can.drawLine(10, height - 2, 222, height - 2, paint);
+            int height = 132 + ((x - 1) * 33);
+            drawText(mCheckBoxSectionOne.get(x).getHeading(), 13, height, FONT12, carlitoBold);
+            paint.setPathEffect(pathEffect);
+            can.drawLine(10, height - 6, 222, height - 6, paint);
             paint.setPathEffect(null);
         }
 
@@ -170,16 +180,18 @@ public class Take5PdfDocument {
         top = 104;
         for (int x = 0; x < mCheckBoxSectionTwo.size(); x++) {
             float topLoc = top + (x * 20.7f);
-            boolean isYes = mCheckBoxSectionTwo.get(x).isYes();
+            Take5Data.CheckValue isYes = mCheckBoxSectionTwo.get(x).getCheckValue();
             drawBox(left, topLoc, paint, false, isYes);
         }
 
+
+
         for (int x = 0; x < mCheckBoxSectionTwo.size(); x++) {
-            float height = 101 + (x * 20.7f);
-            drawText(mCheckBoxSectionTwo.get(x).getString(), 238, height + 3, FONT12, carlitoBold);
+            float height = 105 + (x * 20.7f);
+            drawText(mCheckBoxSectionTwo.get(x).getHeading(), 238, height + 3, FONT12, carlitoBold);
             if (x > 0) {
-                paint.setPathEffect(new DashPathEffect(new float[]{1, 2}, 0));
-                can.drawLine(238, height, 581, height, paint);
+                paint.setPathEffect(pathEffect);
+                can.drawLine(238, height - 4, 581, height - 4, paint);
                 paint.setPathEffect(null);
             }
         }
@@ -231,7 +243,7 @@ public class Take5PdfDocument {
         drawText("How will hazards and risks be controlled?",
                 319, yLoc + height, FONT12, carlitoBold);
 
-        paint.setPathEffect(new DashPathEffect(new float[]{1, 1}, 0));
+        paint.setPathEffect(pathEffect);
         can.drawLine(262, yLoc + 45, 262, yLoc + 320, paint);
         can.drawLine(302, yLoc + 45, 302, yLoc + 320, paint);
         paint.setPathEffect(null);
@@ -241,11 +253,11 @@ public class Take5PdfDocument {
             drawRiskElement(textHeight, mRiskElements.get(x));
         }
 
-        paint.setPathEffect(new DashPathEffect(new float[] {1.5f,1}, 0));
+        paint.setPathEffect(pathEffect);
         height = yLoc + 350;
         drawText("Name/s:", 12, height, FONT12, carlitoBold);
-        drawText(mEditTextValues[3], 52, height - 3, FONT14, roboto);
-        paint.setPathEffect(new DashPathEffect(new float[]{1, 1}, 0));
+        drawText(mEditTextValues[3], 55, height - 3, FONT14, roboto);
+        paint.setPathEffect(pathEffect);
         can.drawLine(50, height + 12, 580, height + 12, paint);
         paint.setPathEffect(null);
 
@@ -253,8 +265,8 @@ public class Take5PdfDocument {
         height = yLoc + 372;
         drawText("Signatures:", 12, height, FONT12, carlitoBold);
         drawText("Date:", 468, height,FONT12, carlitoBold);
-        drawText(mDateString, 494, height - 3, FONT14, roboto);
-        paint.setPathEffect(new DashPathEffect(new float[]{1, 1}, 0));
+        drawText(mDateString, 497, height - 3, FONT14, roboto);
+        paint.setPathEffect(pathEffect);
         can.drawLine(60, height + 12, 464, height + 12, paint);
         can.drawLine(492, height + 12, 580, height + 12, paint);
         paint.setPathEffect(null);
@@ -327,15 +339,15 @@ public class Take5PdfDocument {
         can.drawRect(xLoc + RADIUS, centre - RADIUS, width, centre + RADIUS, paint);
         can.drawCircle(width, centre, RADIUS, paint);
         can.drawCircle(xLoc + RADIUS, centre, INNER_RADIUS, paintW);
-        can.drawText(string, xLoc + 31, centre + 5, paintW);
+        can.drawText(string, xLoc + 29, centre + 4.5f, paintW);
         paint.setTextSize(16);
         can.drawText(String.valueOf(index), xLoc + RADIUS - 4, centre + 6, paint);
 
         //drawSmallCircle(8, 331, "Assess the level of risk", 3);
-        drawText(mCheckBoxSectionThree.get(index - 3).getString(), xLoc + 8, yLoc + 35, FONT12, carlitoBold);
+        drawText(mCheckBoxSectionThree.get(index - 3).getHeading(), xLoc + 8, yLoc + 35, FONT12, carlitoBold);
 
-        drawText("YES", xLoc + 95, yLoc + 33, FONT14, impact);
-        drawText("NO", xLoc + 138, yLoc + 33, FONT14, impact);
+        drawText("YES", xLoc + 95, yLoc + 35, FONT14, impact);
+        drawText("NO", xLoc + 138, yLoc + 35, FONT14, impact);
 
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(.5f);
@@ -344,10 +356,10 @@ public class Take5PdfDocument {
         paint.setStrokeWidth(1.5f);
         can.drawRect(xLoc + 156, yLoc + 36, xLoc + 156 + 14, yLoc + 36 + 14, paint);
 
-        boolean isYes = mCheckBoxSectionThree.get(index - 3).isYes();
-        if (isYes) {
+        Take5Data.CheckValue isYes = mCheckBoxSectionThree.get(index - 3).getCheckValue();
+        if (isYes == Take5Data.CheckValue.YES) {
             drawCheck(xLoc + 118, yLoc + 36, paint);
-        } else {
+        } else if (isYes == Take5Data.CheckValue.NO) {
             drawCheck(xLoc + 156, yLoc + 36, paint);
         }
     }
@@ -378,7 +390,7 @@ public class Take5PdfDocument {
      * @param isYes true if Yes checkbox is ticked
      */
     private void drawBox(float left, float top, Paint paint,
-                        boolean isSecondBold, boolean isYes) {
+                        boolean isSecondBold, Take5Data.CheckValue isYes) {
 
         int right = (int) left + BOX_WIDTH;
         int bottom = (int) top + BOX_WIDTH;
@@ -395,25 +407,30 @@ public class Take5PdfDocument {
             can.drawRect(left + 22, top, right + 22, bottom, paint);
         }
 
-        if (isYes) {
+        if (isYes == Take5Data.CheckValue.YES) {
             drawCheck(left, top, paint);
-        } else {
+        } else if (isYes == Take5Data.CheckValue.NO) {
             drawCheck(left + 22, top, paint);
         }
         paint.setStrokeWidth(.5f);
     }
 
     public void drawText(String string, float xLoc, float yLoc, float textSize, Typeface typeface) {
-        TextView textv = new TextView(mContext);
-        textv.layout(0, 0, 200, 160);
-        textv.setText(string);
-        textv.setTextSize(textSize);
-        textv.setTypeface(typeface);
-        textv.setTextColor(Color.BLACK);
-        can.save();
-        can.translate(xLoc, yLoc);
-        textv.draw(can);
-        can.restore();
+
+        if (string != null) {
+            TextPaint mTextPaint=new TextPaint();
+            mTextPaint.setTypeface(typeface);
+            mTextPaint.setTextSize(textSize);
+
+            StaticLayout mTextLayout = new StaticLayout(string, mTextPaint, ((int)(595 * 0.28)), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+
+            can.save();
+            // calculate x and y position where your text will be placed
+
+            can.translate(xLoc, yLoc);
+            mTextLayout.draw(can);
+            can.restore();
+        }
     }
 
     public void setDateTime(Date date) {
@@ -425,44 +442,28 @@ public class Take5PdfDocument {
     }
 
     public void drawRiskElement(int height, Take5RiskElement element) {
-        TextView textv = new TextView(mContext);
-        TextView textm = new TextView(mContext);
-        TextView textg = new TextView(mContext);
+        TextPaint textPaint = new TextPaint();
+        textPaint.setTypeface(roboto);
+        textPaint.setTextSize(FONT14);
+        textPaint.setColor(Color.BLACK);
 
-        textv.setText(element.getOne());
-        textv.layout(0, 0, 230, 180);
-        textv.setWidth(160);
-        textv.setTextSize(FONT14);
-        textv.setTypeface(roboto);
-        textv.setTextColor(Color.BLACK);
-        textm.setText(element.getTwo());
-        textm.setTextSize(FONT14);
-        textm.setTypeface(roboto);
-        textm.setTextColor(Color.BLACK);
-        textm.layout(0, 0, 250, 160);
-        if (element.getRating().toString() == "NA") {
-            textg.setText(" -");
-        } else {
-            textg.setText(element.getRating().toString());
-        }
-        textg.setTextSize(FONT14);
-        textg.setTypeface(roboto);
-        textg.setTextColor(Color.BLACK);
-        textg.layout(0, 0, 100, 100);
+        StaticLayout one = new StaticLayout(element.getOne(), textPaint, 230, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        StaticLayout rating = new StaticLayout(element.getRating().toString(), textPaint, 100, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        StaticLayout two = new StaticLayout(element.getTwo(), textPaint, 250, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
 
         can.save();
         can.translate(30, height);
-        textv.draw(can);
+        one.draw(can);
         can.restore();
 
         can.save();
         can.translate(320, height);
-        textm.draw(can);
+        two.draw(can);
         can.restore();
 
         can.save();
         can.translate(270, height);
-        textg.draw(can);
+        rating.draw(can);
         can.restore();
     }
 }

@@ -28,23 +28,50 @@ import java.util.Date;
  */
 public class Take5Data {
 
+    /*
+        CheckValue
+        Value of checkboxes. NA means neither yes or no has been checked
+     */
+    public enum CheckValue {
+        YES,
+        NO,
+        NA
+    }
+
     private static Take5Data sTake5Data;
 
     private Date mDate;
-    private String[] labels;                        //label array from R.strings
-    private ArrayList<CheckBoxData> mCheckBoxs;     //each checkbox entry
+
+    private ArrayList<CheckBoxData> mCheckBoxsSection1;     //each checkbox entry
+    private ArrayList<CheckBoxData> mCheckBoxsSection2;     //each checkbox entry
+    private ArrayList<CheckBoxData> mCheckBoxsSection3;     //each checkbox entry
+
     private ArrayList<Take5RiskElement> mRiskElements;   //elements for list
     private String[] mEditTexts;                    //text entries from user
 
     private Take5Data(Context appContext) {
-        labels = appContext.getResources().getStringArray(R.array.labels);
+        String[] section1Labels = appContext.getResources().getStringArray(R.array.section1);
+        String[] section2Labels = appContext.getResources().getStringArray(R.array.section2);
+        String[] section2SubLabels = appContext.getResources().getStringArray(R.array.section2subheadings);
+        String[] section3Labels = appContext.getResources().getStringArray(R.array.section3);
 
-        mCheckBoxs = new ArrayList<>();
+        mCheckBoxsSection1 = new ArrayList<>();
+        mCheckBoxsSection2 = new ArrayList<>();
+        mCheckBoxsSection3 = new ArrayList<>();
         mRiskElements = new ArrayList<>();
 
         //creates all checkboxs with unique id, adds string, and sets all unchecked
-        for (int x = 0; x < labels.length; x++) {
-            mCheckBoxs.add(new CheckBoxData(x, labels[x], false));
+        for (int x = 0; x < section1Labels.length; x++) {
+            mCheckBoxsSection1.add(new CheckBoxData(x, section1Labels[x], null, CheckValue.NA));
+        }
+
+        for (int x = 0; x < section2Labels.length; x++) {
+            mCheckBoxsSection2.add(
+                    new CheckBoxData(x, section2Labels[x], section2SubLabels[x], CheckValue.NA));
+        }
+
+        for (int x = 0; x < section3Labels.length; x++) {
+            mCheckBoxsSection3.add(new CheckBoxData(x, section3Labels[x], null, CheckValue.NA));
         }
 
         /**
@@ -64,25 +91,15 @@ public class Take5Data {
         return sTake5Data;
     }
 
-
-    /**
-     * returns checkboxes for fragments to use.
-     * getCheckBoxes returns all checkboxes
-     * Section one contains the first 7 boxes (under item 1 on sheet)
-     * Two the next 11 (under item 2)
-     * Three holds the last three boxes (items 3,4 and 5)
-     */
-    public ArrayList<CheckBoxData> getCheckBoxs() {
-        return mCheckBoxs;
-    }
+    // GETTERS FOR CHECKBOX DATA ARRAYS
     public ArrayList<CheckBoxData> getSectionOneCheckBoxs() {
-        return new ArrayList<>(mCheckBoxs.subList(0,7));
+        return mCheckBoxsSection1;
     }
     public ArrayList<CheckBoxData> getSectionTwoCheckBoxs() {
-        return new ArrayList<>(mCheckBoxs.subList(7,18));
+        return mCheckBoxsSection2;
     }
     public ArrayList<CheckBoxData> getSectionThreeCheckBoxs() {
-        return new ArrayList<>(mCheckBoxs.subList(18,21));
+        return mCheckBoxsSection3;
     }
 
     public ArrayList<Take5RiskElement> getRiskElements() {
@@ -105,50 +122,35 @@ public class Take5Data {
         return mDate;
     }
 
-    public void clearData() {
-        mDate = newDate();
-        for (CheckBoxData c:mCheckBoxs) {
-            c.setIsYes(false);
-        }
-        mRiskElements.clear();
-        for (int x = 0; x < mEditTexts.length; x++) {
-            mEditTexts[x] = null;
-        }
-    }
-
     public class CheckBoxData {
         private int mId;
-        private String mString;
-        private boolean mIsYes;
+        private String mHeading;
+        private String mSubHeading;
+        private CheckValue mCheckValue;
 
-        public CheckBoxData(int id, String string, boolean isYes) {
+        public CheckBoxData(int id, String heading, String subheading, CheckValue checkValue) {
             mId = id;
-            mString = string;
-            mIsYes = isYes;
+            mHeading = heading;
+            mSubHeading = subheading;
+            mCheckValue = checkValue;
         }
 
-        public boolean isYes() {
-            return mIsYes;
+        public CheckValue getCheckValue() {
+            return mCheckValue;
         }
 
         public int getId() {
             return mId;
         }
 
-        public String getString() {
-            return mString;
+        public String getHeading() {
+            return mHeading;
         }
 
-        public void setIsYes(boolean isYes) {
-            mIsYes = isYes;
-        }
+        public String getSubHeading() {return mSubHeading; }
 
-        public void checked() {
-            if (mIsYes) {
-                mIsYes = false;
-            } else {
-                mIsYes = true;
-            }
+        public void setIsYes(CheckValue isYes) {
+            mCheckValue = isYes;
         }
     }
 

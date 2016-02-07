@@ -18,32 +18,20 @@ package com.semfapp.adamdilger.semf;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.util.ArrayList;
 
-public class hazardIdActivity extends AppCompatActivity implements Communicator {
+public class hazardIdActivity extends AbstractTabLayoutFragment implements Communicator {
 
-    private ViewPager viewPager;
-    private PagerAdapter pagerAdapter;
     private HazardIdData data;
     private InputMethodManager imm;
     private File pdfAttatchment;
@@ -51,19 +39,10 @@ public class hazardIdActivity extends AppCompatActivity implements Communicator 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_protect_plan);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Hazard Identification");
-        setSupportActionBar(toolbar);
 
         data = HazardIdData.getInstance();
 
-
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(pagerAdapter);
-
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        super.getViewPager().setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 if (position == 4) {
@@ -85,54 +64,33 @@ public class hazardIdActivity extends AppCompatActivity implements Communicator 
         imm = (InputMethodManager)(getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE));
     }
 
-    private class ScreenSlidePagerAdapter extends PagerAdapterTemplate {
-        public ScreenSlidePagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
 
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return new hazardIdF1();
-                case 1:
-                    return getQuestionFragment(R.string.hazard_id_hazard_observed);
-                case 2:
-                    return getQuestionFragment(R.string.hazard_id_limit_ramifications);
-                case 3:
-                    return getQuestionFragment(R.string.hazard_id_resolution);
-                case 4:
-                    return new hazardIdF5();
-                default:
-                    return null;
-            }
-        }
+    @Override
+    String setToolbarTitle() {
+        return "Hazard Identification";
+    }
 
-        @Override
-        public int getCount() {
-            return 5;
+    @Override
+    Fragment getFragmentAtIndex(int index) {
+        switch (index) {
+            case 0:
+                return new hazardIdF1();
+            case 1:
+                return getQuestionFragment(R.string.hazard_id_hazard_observed);
+            case 2:
+                return getQuestionFragment(R.string.hazard_id_limit_ramifications);
+            case 3:
+                return getQuestionFragment(R.string.hazard_id_resolution);
+            case 4:
+                return new hazardIdF5();
+            default:
+                return null;
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, 0, 0, "Submit").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                createPdf();
-                return true;
-            }
-        }).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
-        return true;
-    }
-
-    private QuestionFragment getQuestionFragment(int questionId) {
-        QuestionFragment qf = new QuestionFragment();
-        Bundle args = new Bundle();
-        args.putInt(QuestionFragment.QUESTION_TEXT_CODE, questionId);
-        qf.setArguments(args);
-        return qf;
+    int getFragmentCount() {
+        return 5;
     }
 
     @Override
@@ -165,6 +123,7 @@ public class hazardIdActivity extends AppCompatActivity implements Communicator 
         startActivityForResult(Intent.createChooser(emailIntent, "Send email..."), Emailer.EMAILER_REQUEST_CODE);
     }
 
+
     public void createPdf() {
         Document documentTemplate = Pdf.getTemplate(getApplicationContext(), data.getProjectNumber());
 
@@ -195,15 +154,5 @@ public class hazardIdActivity extends AppCompatActivity implements Communicator 
         MainActivity.pdf.createPdfToFile(this, documentTemplate.html(), filePath, null);
 
         pdfAttatchment = new File(filePath);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == Emailer.EMAILER_REQUEST_CODE
-                && resultCode == RESULT_CANCELED) {
-            finish();
-        }
     }
 }

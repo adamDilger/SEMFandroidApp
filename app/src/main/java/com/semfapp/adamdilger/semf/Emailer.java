@@ -93,6 +93,13 @@ public class Emailer {
         subject = subject + " - " + sdf.format(MainActivity.currentDate);
 
 
+        /* TO VIEW AS PDF
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, "application/pdf");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        return intent;
+        */
+
         if (uri != null) {
             Intent emailIntent = new Intent(Intent.ACTION_SEND);
             emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

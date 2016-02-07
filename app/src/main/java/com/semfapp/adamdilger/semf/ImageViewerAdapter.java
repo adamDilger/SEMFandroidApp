@@ -37,7 +37,6 @@ public class ImageViewerAdapter extends RecyclerView.Adapter<ImageViewerAdapter.
     private PhotoLibrary dataArray;
     private Context context;
 
-
     public ImageViewerAdapter(Context context, PhotoLibrary array) {
         layoutInflator = LayoutInflater.from(context);
         this.context = context;
@@ -91,7 +90,6 @@ public class ImageViewerAdapter extends RecyclerView.Adapter<ImageViewerAdapter.
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView textView;
         Button deleteButton;
 
         public MyViewHolder(View itemView) {

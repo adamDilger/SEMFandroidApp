@@ -16,7 +16,8 @@
         android:maxLines="5"
         android:maxLength="150"
         android:id="@+id/element_text_one"
-        android:hint="What are the hazards and risks?"/>
+        android:hint="What are the hazards and risks?"
+        android:lines="2" />
     <RadioGroup
         android:id="@+id/radioGroup"
         android:padding="10dp"
@@ -50,5 +51,6 @@
         android:maxLines="5"
         android:id="@+id/element_text_two"
         android:hint="How will hazards and risks be controlled?"
-        />
+        android:linksClickable="true"
+        android:lines="2" />
 </LinearLayout>

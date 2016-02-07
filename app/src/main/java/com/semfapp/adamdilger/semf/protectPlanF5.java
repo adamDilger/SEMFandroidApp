@@ -71,30 +71,6 @@ public class protectPlanF5 extends Fragment {
             @Override
             public void onClick(View v) {
                 ((protectPlanActivity)getActivity()).createPdf();
-
-//                try {
-//                    Document document = Jsoup.parse(getActivity().getAssets().open("protectPlan.html"), "utf-8", "http://www.example.com");
-//
-//                    Element body = document.body();
-//
-//                    Elements lists = body.select(".list_box");          //Lists html Elements
-//                    ArrayList<String[]> arrayList = data.getArray();    //editText string arrays
-//
-//                    //for each Element in lists, add each bullet from arrayList.string[] as a <p>
-//                    for (int x = 0; x < lists.size(); x++) {
-//                        String f = "";
-//
-//                        for (String bullet : arrayList.get(x)) {
-//                            f += "<p>" + bullet + "</p>";
-//                        }
-//
-//                        lists.get(x).html(f);
-//                    }
-//
-//                    ((protectPlanActivity)getActivity()).createPdf(document.html(), "Protect Plan");
-//                } catch (Exception e) {
-//
-//                }
             }
         });
 

@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="label1">Do I understand what I need to do?</string>
-    <string name="label2">Do I need a SWMS for any \'High Risk \nConstruction work\'?</string>
-    <string name="label3">Do I need any Permits? (e.g. hot\nwork/confined space/dig)?</string>
-    <string name="label4">Do I have correct PPE in good\ncondition for the task?</string>
-    <string name="label5">Do I have the suitable tools and\nequipment for the task?</string>
-    <string name="label6">Do I have my vehicle parked\nappropriately?</string>
-    <string name="label7">Am I trained, competent, licensed\nand fit to perform this task?</string>
-    <string name="label8">Manual Handling</string>
-    <string name="label9">Gravity</string>
-    <string name="label10">Mechanical</string>
-    <string name="label11">Electrical</string>
-    <string name="label12">Chemical</string>
-    <string name="label13">Pressure</string>
-    <string name="label14">Noise</string>
-    <string name="label15">Biological</string>
-    <string name="label16">Radiation</string>
-    <string name="label17">Psychological</string>
-    <string name="label18">Heat and Cold</string>
-    <string name="label19">Risk(s) worked out?</string>
-    <string name="label20">SWMS completed</string>
-    <string name="label21">Safe to proceed</string>
+    <!--<string name="label1">Do I understand what I need to do?</string>-->
+    <!--<string name="label2">Do I need a SWMS for any \'High Risk \nConstruction work\'?</string>-->
+    <!--<string name="label3">Do I need any Permits? (e.g. hot\nwork/confined space/dig)?</string>-->
+    <!--<string name="label4">Do I have correct PPE in good\ncondition for the task?</string>-->
+    <!--<string name="label5">Do I have the suitable tools and\nequipment for the task?</string>-->
+    <!--<string name="label6">Do I have my vehicle parked\nappropriately?</string>-->
+    <!--<string name="label7">Am I trained, competent, licensed\nand fit to perform this task?</string>-->
+    <!--<string name="label8">Manual Handling</string>-->
+    <!--<string name="label9">Gravity</string>-->
+    <!--<string name="label10">Mechanical</string>-->
+    <!--<string name="label11">Electrical</string>-->
+    <!--<string name="label12">Chemical</string>-->
+    <!--<string name="label13">Pressure</string>-->
+    <!--<string name="label14">Noise</string>-->
+    <!--<string name="label15">Biological</string>-->
+    <!--<string name="label16">Radiation</string>-->
+    <!--<string name="label17">Psychological</string>-->
+    <!--<string name="label18">Heat and Cold</string>-->
+    <!--<string name="label19">Risk(s) worked out?</string>-->
+    <!--<string name="label20">SWMS completed</string>-->
+    <!--<string name="label21">Safe to proceed</string>-->
 
 
     <string name="job_reference">Job Reference</string>
@@ -32,31 +32,37 @@
 
 
     <!-- labels -->
-    <string-array name="labels">
-        <item>@string/label1</item>
-        <item>@string/label2</item>
-        <item>@string/label3</item>
-        <item>@string/label4</item>
-        <item>@string/label5</item>
-        <item>@string/label6</item>
-        <item>@string/label7</item>
-        <item>@string/label8</item>
-        <item>@string/label9</item>
-        <item>@string/label10</item>
-        <item>@string/label11</item>
-        <item>@string/label12</item>
-        <item>@string/label13</item>
-        <item>@string/label14</item>
-        <item>@string/label15</item>
-        <item>@string/label16</item>
-        <item>@string/label17</item>
-        <item>@string/label18</item>
-        <item>@string/label19</item>
-        <item>@string/label20</item>
-        <item>@string/label21</item>
+    <string-array name="section1">
+        <item>Do I understand what I need to do?</item>
+        <item>Do I need a SWMS for any \'High Risk \nConstruction work\'?</item>
+        <item>Do I need any Permits? (e.g. hot\nwork/confined space/dig)?</item>
+        <item>Do I have correct PPE in good\ncondition for the task?</item>
+        <item>Do I have the suitable tools and\nequipment for the task?</item>
+        <item>Do I have my vehicle parked\nappropriately?</item>
+        <item>Am I trained, competent, licensed\nand fit to perform this task?</item>
     </string-array>
 
-    <string-array name="examples">
+    <string-array name="section2">
+        <item>Manual Handling</item>
+        <item>Gravity</item>
+        <item>Mechanical</item>
+        <item>Electrical</item>
+        <item>Chemical</item>
+        <item>Pressure</item>
+        <item>Noise</item>
+        <item>Biological</item>
+        <item>Radiation</item>
+        <item>Psychological</item>
+        <item>Heat and Cold</item>
+    </string-array>
+
+    <string-array name="section3">
+        <item>Risk(s) worked out?</item>
+        <item>SWMS completed</item>
+        <item>Safe to proceed</item>
+    </string-array>
+
+    <string-array name="section2subheadings">
         <item>Lifting, awkward positions, impacts, over-exertion</item>
         <item>Slips, trips and falls and struck by falling objects</item>
         <item>Caught in moving parts, struck by plant or flying objects</item>
