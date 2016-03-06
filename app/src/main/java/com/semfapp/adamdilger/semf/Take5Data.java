@@ -154,6 +154,29 @@ public class Take5Data {
         }
     }
 
+    public boolean allFieldsFilled() {
+
+        for (CheckBoxData x : mCheckBoxsSection1) {
+            if (x.getCheckValue() == CheckValue.NA) {
+                return false;
+            }
+        }
+
+        for (CheckBoxData x : mCheckBoxsSection2) {
+            if (x.getCheckValue() == CheckValue.NA) {
+                return false;
+            }
+        }
+
+        for (CheckBoxData x : mCheckBoxsSection3) {
+            if (x.getCheckValue() == CheckValue.NA) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static void exitDelete() {
         sTake5Data = null;
     }

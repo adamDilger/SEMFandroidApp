@@ -34,8 +34,6 @@ import android.widget.RadioButton;
 public class SiteInstructionF1 extends Fragment {
 
     SiteInstructionData data;
-    RadioButton radioYes, radioNo;
-    LinearLayout jobNumberLayout;
     EditText jobNumber, site, siteLocation, recipient, recipientEmail;
 
     @Override
@@ -49,32 +47,11 @@ public class SiteInstructionF1 extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_site_instruction_f1, container, false);
 
-        radioYes = (RadioButton) v.findViewById(R.id.site_instruction_radio_yes);
-        radioNo = (RadioButton) v.findViewById(R.id.site_instruction_radio_no);
-        jobNumberLayout = (LinearLayout) v.findViewById(R.id.job_number_layout);
         jobNumber = (EditText)v.findViewById(R.id.site_instruction_job_number_editText);
         site = (EditText)v.findViewById(R.id.site_instruction_site_editText);
         siteLocation = (EditText)v.findViewById(R.id.site_instruction_site_location_editText);
         recipient = (EditText)v.findViewById(R.id.site_instruction_recipient_editText);
         recipientEmail = (EditText)v.findViewById(R.id.site_instruction_recipient_email_editText);
-
-        radioYes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                jobNumberLayout.setVisibility(View.VISIBLE);
-                radioNo.setChecked(false);
-                radioYes.setChecked(true);
-                jobNumber.requestFocus();
-            }
-        });
-        radioNo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                jobNumberLayout.setVisibility(View.GONE);
-                radioNo.setChecked(true);
-                radioYes.setChecked(false);
-            }
-        });
 
         jobNumber.addTextChangedListener(new TextWatcher() {
             @Override

@@ -23,7 +23,7 @@
     <!--<string name="label21">Safe to proceed</string>-->
 
 
-    <string name="job_reference">Job Reference</string>
+    <string name="job_reference">Job Number</string>
     <string name="date">Date</string>
     <string name="time">Time</string>
     <string name="location">Location</string>

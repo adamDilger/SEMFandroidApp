@@ -13,7 +13,7 @@
     <string name="home_protect">\u2022 PROTECT PLAN</string>
     <string name="home_take5">\u2022 TAKE 5</string>
     <string name="home_hazard">\u2022 HAZARD ID</string>
-    <string name="home_incident">\u2022 INCIDENT</string>
+    <string name="home_incident">\u2022 INCIDENT PROCEDURE</string>
     <string name="home_site_inctruct">\u2022 SITE INSTRUCTION</string>
     <string name="home_non_conform">\u2022 NON CONFORMANCE</string>
 
@@ -66,12 +66,9 @@
         has been filled out, click submit, choose the email application of your choice and
         send email.</string>
 
-    <string name="incident_string1">
-        <![CDATA[a)    There has been a death of a person]]>
-    </string>
+    <string name="incident_html1">
+        <![CDATA[a)    There has been a death of a person
 
-    <string name="incident_html2">
-        <![CDATA[
         <p>b)    There has been a serious injury, illness, immediate treatment; as an in patient in a hospital</p>
         <ul>
         <li>for the amputation of any part of the body for a serious head injury for a serious eye injury for a serious burn</li>
@@ -80,23 +77,29 @@
         <li>for the loss of a bodily function</li>
         <li>for serious lacerations Medical treatment within 48 hours of exposure to a substance.</li>
         </ul>
+        ]]>
+    </string>
+
+    <string name="incident_html2"><![CDATA[
+
+    <p>c)    There has been a dangerous incident;</p>
+
+    <ul>
+        <li>an uncontrolled escape, spillage or leakage of a substance</li>
+        <li>an uncontrolled implosion, explosion or fire</li>
+        <li>an uncontrolled escape of gas or steam an uncontrolled escape of a pressurised substance</li>
+        <li>electric shock</li>
+        <li>the fall or release from a height of any plant, substance or thing</li>
+        <li>the collapse, overturning, failure or malfunction of, or damage to, any registered plant </li>
+        <li>the collapse or partial collapse of a structure including scaffolding </li>
+        <li>the collapse or failure of an excavation or of any shoring supporting an excavation </li>
+        <li>the inrush of water, mud or gas in workings, in an underground excavation or tunnel, or the interruption of the main system of ventilation in an underground excavation or tunnel</li>
+    <ul>
 
         ]]>
     </string>
 
-    <string name="incident_string3"><![CDATA[c)    There has been a dangerous incident;
-        an uncontrolled escape, spillage or leakage of a substance an uncontrolled implosion,
-        explosion or fire an uncontrolled escape of gas or steam an uncontrolled escape
-        of a pressurised substance electric shock the fall or release from a height of
-        any plant, substance or thing the collapse, overturning, failure or malfunction
-        of, or damage to, any registered plant the collapse or partial collapse of a
-        structure including scaffolding the collapse or failure of an excavation or of
-        any shoring supporting an excavation the inrush of water, mud or gas in workings,
-        in an underground excavation or tunnel, or the interruption of the main system of
-        ventilation in an underground excavation or tunnel. ]]>
-    </string>
-
-    <string name="incident_html4">
+    <string name="incident_html3">
         <![CDATA[
         <ul>
             <li>Preserve the site unless actions are required to mitigate immediate further danger</li>

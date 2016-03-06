@@ -20,6 +20,7 @@ package com.semfapp.adamdilger.semf;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +28,8 @@ import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
@@ -42,6 +45,7 @@ public class Take5AddElementDialog extends DialogFragment {
     String mRating = "NA";
     private EditText t1, t3;
     private RadioGroup radioGroup;
+    private Button riskMatrixButton;
 
     public static Take5AddElementDialog newInstance() {
         Take5AddElementDialog fragment = new Take5AddElementDialog();
@@ -118,6 +122,16 @@ public class Take5AddElementDialog extends DialogFragment {
             }
         });
 
+        riskMatrixButton = (Button)v.findViewById(R.id.risk_matrix_button);
+        riskMatrixButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Take5RiskMatrixDialog dialog = new Take5RiskMatrixDialog();
+
+                dialog.show(getActivity().getFragmentManager(), "tag");
+            }
+        });
+
         return new AlertDialog.Builder(getActivity())
                 .setView(v)
                 .setTitle("Add New Item")
@@ -138,5 +152,11 @@ public class Take5AddElementDialog extends DialogFragment {
                         }
                 )
                 .create();
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        super.onViewCreated(view, savedInstanceState);
     }
 }

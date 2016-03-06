@@ -35,6 +35,7 @@ public class hazardIdActivity extends AbstractTabLayoutFragment implements Commu
     private HazardIdData data;
     private InputMethodManager imm;
     private File pdfAttatchment;
+    private String name; //name for pdf and for email subject
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +118,7 @@ public class hazardIdActivity extends AbstractTabLayoutFragment implements Commu
     public void finishedCreatingPdf() {
         //create email intent
         Emailer emailer = new Emailer(getApplicationContext());
-        Intent emailIntent = emailer.emailAttatchmentIntent(Emailer.HAZARD_ID_CODE, pdfAttatchment, null);
+        Intent emailIntent = emailer.emailAttatchmentIntent(Emailer.HAZARD_ID_CODE, pdfAttatchment, null, name);
 
         //start email intent
         startActivityForResult(Intent.createChooser(emailIntent, "Send email..."), Emailer.EMAILER_REQUEST_CODE);
@@ -149,8 +150,10 @@ public class hazardIdActivity extends AbstractTabLayoutFragment implements Commu
 
         }
 
-        String filePath = MainActivity.pdf.createFilePath(this, "Hazard ID");
+        //create filename / subject for email
+        name = Emailer.getSubject(Emailer.HAZARD_ID_CODE, data.getProjectNumber());
 
+        String filePath = MainActivity.pdf.createFilePath(this, name);
         MainActivity.pdf.createPdfToFile(this, documentTemplate.html(), filePath, null);
 
         pdfAttatchment = new File(filePath);

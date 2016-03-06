@@ -27,4 +27,5 @@ dependencies {
     compile 'com.itextpdf.tool:xmlworker:5.5.7'
     compile 'com.android.support:recyclerview-v7:23.1.0'
     compile 'com.yqritc:recyclerview-flexibledivider:1.2.8'
+    compile 'com.commit451:PhotoView:1.2.4'
 }

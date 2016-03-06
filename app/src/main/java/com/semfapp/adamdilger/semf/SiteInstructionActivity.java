@@ -38,6 +38,7 @@ public class SiteInstructionActivity extends AbstractTabLayoutFragment implement
     private SiteInstructionData data;
     private InputMethodManager imm;
     public File pdfAttatchment;
+    private String name;    //name for file and email subject
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +110,7 @@ public class SiteInstructionActivity extends AbstractTabLayoutFragment implement
     public void finishedCreatingPdf() {
         //create email intent
         Emailer emailer = new Emailer(getApplicationContext());
-        Intent emailIntent = emailer.emailAttatchmentIntent(Emailer.SITE_INSTRUCTION_CODE, pdfAttatchment, data.getRecipientEmail());
+        Intent emailIntent = emailer.emailAttatchmentIntent(Emailer.SITE_INSTRUCTION_CODE, pdfAttatchment, data.getRecipientEmail(), name);
 
         //start email intent
         startActivityForResult(Intent.createChooser(emailIntent, "Send email..."), Emailer.EMAILER_REQUEST_CODE);
@@ -150,7 +151,8 @@ public class SiteInstructionActivity extends AbstractTabLayoutFragment implement
             System.out.println("ERROR: " + e.toString());
         }
 
-        String filePath = MainActivity.pdf.createFilePath(this, "Site Instruction");
+        name = Emailer.getSubject(Emailer.SITE_INSTRUCTION_CODE, data.getJobNumber());
+        String filePath = MainActivity.pdf.createFilePath(this, name);
 
         MainActivity.pdf.createPdfToFile(this, documentTemplate.html(), filePath, data.getImageArray());
 

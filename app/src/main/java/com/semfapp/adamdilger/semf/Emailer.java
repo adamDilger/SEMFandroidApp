@@ -31,6 +31,32 @@ public class Emailer {
         this.context = context;
     }
 
+    public static String getSubject(int code, @Nullable String jobNumber) {
+        String date = new SimpleDateFormat("yyyyMMdd").format(MainActivity.currentDate);
+        String jobType = "";
+
+        switch (code) {
+            case 0:
+                jobType = "PROTECT PLAN";
+                break;
+            case 1:
+                jobType = "TAKE5";
+                break;
+            case 2:
+                jobType = "HAZARD ID";
+                break;
+            case 4:
+                jobType = "SITE INSTRUCTION";
+                break;
+        }
+
+        if (jobNumber != null) {
+            return String.format("%s - %s - %s", date, jobType, jobNumber);
+        } else {
+            return String.format("%s - %s", date, jobType);
+        }
+    }
+
     /*
         Code
         0 : Protect Plan
@@ -42,56 +68,42 @@ public class Emailer {
 
         recipientEmail is for forms that require email to be sent to unique recipeint
      */
-    public Intent emailAttatchmentIntent(int code, File pdfAttatchment, @Nullable String recipientEmail) {
+    public Intent emailAttatchmentIntent(int code, File pdfAttatchment, @Nullable String recipientEmail, String subject) {
 
         Uri uri = Uri.fromFile(pdfAttatchment);
 
-        String userEmail = "";
-        String supervisorEmail = "";
+        String userEmail;
         String ccEmail = "";
-        String subject = "";
 
         SharedPreferences sharedPreferences = context.getSharedPreferences("userProfileData", context.MODE_PRIVATE);
 
         //set supervisor/user email
-        supervisorEmail = sharedPreferences.getString(userProfileActivity.SUPERVISOR_EMAIL, "default");
         userEmail = sharedPreferences.getString(userProfileActivity.EMAIL, "default");
 
         switch (code) {
             case 0:
                 ccEmail = sharedPreferences.getString(userProfileActivity.CC_PROTECT, "default");
-                subject = "Protect Plan";
                 break;
             case 1:
                 ccEmail = sharedPreferences.getString(userProfileActivity.CC_TAKE5, "default");
-                subject = "Take 5";
                 break;
             case 2:
                 ccEmail = sharedPreferences.getString(userProfileActivity.CC_HAZARD, "default");
-                subject = "Hazard ID";
                 break;
             case 3:
-                ccEmail = sharedPreferences.getString(userProfileActivity.CC_INCEDENT, "default");
-                subject = "Incedent Report";
+                //No emailing feature for incident procedure
                 break;
             case 4:
-                subject = "Site Instruction";
-                break;
-            case 5:
-                subject = "Non Conformance";
                 break;
         }
 
-
-        //if there is a recipient email, change supervisor email to recipient
+        //create recipients array, adding in recipientEmail if != null
+        String[] recipients;
         if (recipientEmail != null) {
-            supervisorEmail = recipientEmail;
+            recipients = new String[]{userEmail, recipientEmail};
+        } else {
+            recipients = new String[]{userEmail};
         }
-
-        //Date for subject
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        subject = subject + " - " + sdf.format(MainActivity.currentDate);
-
 
         /* TO VIEW AS PDF
         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -105,7 +117,7 @@ public class Emailer {
             emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //            emailIntent.setType("text/plain");
             emailIntent.setType("message/rfc822");
-            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{supervisorEmail, userEmail});
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, recipients);
             emailIntent.putExtra(Intent.EXTRA_CC, new String[] {ccEmail});
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
             emailIntent.putExtra(Intent.EXTRA_STREAM, uri);

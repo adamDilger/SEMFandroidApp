@@ -31,8 +31,6 @@ import android.widget.RadioButton;
 public class hazardIdF1 extends Fragment {
 
     HazardIdData data;
-    RadioButton radioYes, radioNo;
-    LinearLayout jobNumberLayout;
     EditText jobNumberEditText, siteLocationEditText;
 
     @Override
@@ -45,28 +43,6 @@ public class hazardIdF1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_hazard_id_f1, container, false);
-
-        radioYes = (RadioButton)v.findViewById(R.id.hazard_id_radio_yes);
-        radioNo = (RadioButton)v.findViewById(R.id.hazard_id_radio_no);
-        jobNumberLayout = (LinearLayout)v.findViewById(R.id.job_number_layout);
-
-        radioYes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                jobNumberLayout.setVisibility(View.VISIBLE);
-                radioNo.setChecked(false);
-                radioYes.setChecked(true);
-                jobNumberEditText.requestFocus();
-            }
-        });
-        radioNo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                jobNumberLayout.setVisibility(View.GONE);
-                radioNo.setChecked(true);
-                radioYes.setChecked(false);
-            }
-        });
 
         jobNumberEditText = (EditText)v.findViewById(R.id.hazard_id_job_number_editText);
         jobNumberEditText.setText(data.getProjectNumber());

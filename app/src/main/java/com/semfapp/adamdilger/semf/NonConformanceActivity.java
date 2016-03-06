@@ -90,7 +90,7 @@ public class NonConformanceActivity extends AbstractTabLayoutFragment implements
     public void finishedCreatingPdf() {
         //create email intent
         Emailer emailer = new Emailer(getApplicationContext());
-        Intent emailIntent = emailer.emailAttatchmentIntent(Emailer.NON_CONFORMANCE_CODE, pdfAttatchment, data.getRecipientEmail());
+        Intent emailIntent = emailer.emailAttatchmentIntent(Emailer.NON_CONFORMANCE_CODE, pdfAttatchment, data.getRecipientEmail(), null);
 
         //start email intent
         startActivityForResult(Intent.createChooser(emailIntent, "Send email..."), Emailer.EMAILER_REQUEST_CODE);

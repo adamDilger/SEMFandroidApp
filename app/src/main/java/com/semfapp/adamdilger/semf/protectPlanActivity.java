@@ -90,7 +90,7 @@ public class protectPlanActivity extends AbstractTabLayoutFragment implements Co
     public void finishedCreatingPdf() {
         //create email intent
         Emailer emailer = new Emailer(getApplicationContext());
-        Intent emailIntent = emailer.emailAttatchmentIntent(Emailer.PROTECT_PLAN_CODE, pdfAttatchment, null);
+        Intent emailIntent = emailer.emailAttatchmentIntent(Emailer.PROTECT_PLAN_CODE, pdfAttatchment, null, null);
 
         //start email intent
         startActivityForResult(Intent.createChooser(emailIntent, "Send email..."), Emailer.EMAILER_REQUEST_CODE);

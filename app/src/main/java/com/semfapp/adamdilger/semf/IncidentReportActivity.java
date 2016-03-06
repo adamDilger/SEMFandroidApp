@@ -17,10 +17,7 @@ import android.webkit.WebView;
  */
 public class IncidentReportActivity extends AbstractTabLayoutFragment {
 
-    private final int TOTAL_PAGES = 5;
-
-    private ViewPager viewPager;
-    private PagerAdapter pagerAdapter;
+    private final int TOTAL_PAGES = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +26,7 @@ public class IncidentReportActivity extends AbstractTabLayoutFragment {
 
     @Override
     String setToolbarTitle() {
-        return "Incedent Report";
+        return "Incedent Procedure";
     }
 
     @Override
@@ -41,13 +38,11 @@ public class IncidentReportActivity extends AbstractTabLayoutFragment {
             case 0:
                 return new FragmentPage(R.layout.fragment_incident_1);
             case 1:
-                return new FragmentPageText(R.layout.fragment_incident_2,R.string.incident_string1);
+                return new FragmentPageText(R.layout.fragment_incident_2,R.string.incident_html1);
             case 2:
                 return new FragmentPageText(R.layout.fragment_incident_2,R.string.incident_html2);
             case 3:
-                return new FragmentPageText(R.layout.fragment_incident_2,R.string.incident_string3);
-            case 4:
-                return new FragmentPageText(R.layout.fragment_incident_3,R.string.incident_html4);
+                return new FragmentPageText(R.layout.fragment_incident_2,R.string.incident_html3);
             default:
                 return null;
         }

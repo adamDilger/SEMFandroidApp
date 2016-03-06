@@ -49,8 +49,10 @@ public class Take5PdfDocument {
 //    private final float FONT12 = 3.4f;
 //    private final float FONT14 = 4f;
 
-    private final float FONT12 = 11;
-    private final float FONT14 = 13;
+    private final float FONT11;
+    private final float FONT12;
+    private final float FONT14;
+    private final float FONT16;
 
     private Canvas can;
     private Context mContext;
@@ -67,6 +69,16 @@ public class Take5PdfDocument {
     public Take5PdfDocument(Context appContext) {
         can = new Canvas();
         mContext = appContext;
+
+//        FONT11 = mContext.getResources().getDimensionPixelSize(R.dimen.font_11);
+//        FONT12 = mContext.getResources().getDimensionPixelSize(R.dimen.font_12);
+//        FONT14 = mContext.getResources().getDimensionPixelSize(R.dimen.font_14);
+//        FONT16 = mContext.getResources().getDimensionPixelSize(R.dimen.font_16);
+
+        FONT11 = 10;
+        FONT12 = 11;
+        FONT14 = 13;
+        FONT16 = 15;
 
         Take5Data d = Take5Data.get(appContext.getApplicationContext());
 
@@ -248,9 +260,13 @@ public class Take5PdfDocument {
         can.drawLine(302, yLoc + 45, 302, yLoc + 320, paint);
         paint.setPathEffect(null);
 
+        float currentItemHeight = yLoc + 75;
+        float padding = 5;
+
         for (int x = 0; x < mRiskElements.size(); x++) {
-            int textHeight = yLoc + 75 + (x * 40);
-            drawRiskElement(textHeight, mRiskElements.get(x));
+            int textHeight = (int)currentItemHeight;
+            float totalItemHeight = drawRiskElement(textHeight, mRiskElements.get(x));
+            currentItemHeight += totalItemHeight + padding;
         }
 
         paint.setPathEffect(pathEffect);
@@ -297,8 +313,8 @@ public class Take5PdfDocument {
         paintW.setTypeface(impact);
         paint.setTypeface(impact);
         paintW.setColor(Color.WHITE);
-        paintW.setTextSize(12);
-        paint.setTextSize(12);
+        paintW.setTextSize(FONT12);
+        paint.setTextSize(FONT12);
 
         can.drawCircle(xLoc + RADIUS, centre, RADIUS, paint);
         can.drawRect(xLoc + RADIUS, centre - RADIUS, width, centre + RADIUS, paint);
@@ -310,7 +326,7 @@ public class Take5PdfDocument {
 
         can.drawText(string, xLoc + 31, centre + 5, paintW);
         can.drawText("YES   NO", width - 35, centre + 5, paint);
-        paint.setTextSize(16);
+        paint.setTextSize(FONT16);
         can.drawText(String.valueOf(index), xLoc + RADIUS - 4, centre + 6, paint);
 
     }
@@ -332,15 +348,15 @@ public class Take5PdfDocument {
         paintW.setTypeface(impact);
         paint.setTypeface(impact);
         paintW.setColor(Color.WHITE);
-        paintW.setTextSize(12);
-        paint.setTextSize(12);
+        paintW.setTextSize(FONT12);
+        paint.setTextSize(FONT12);
 
         can.drawCircle(xLoc + RADIUS, centre, RADIUS, paint);
         can.drawRect(xLoc + RADIUS, centre - RADIUS, width, centre + RADIUS, paint);
         can.drawCircle(width, centre, RADIUS, paint);
         can.drawCircle(xLoc + RADIUS, centre, INNER_RADIUS, paintW);
         can.drawText(string, xLoc + 29, centre + 4.5f, paintW);
-        paint.setTextSize(16);
+        paint.setTextSize(FONT16);
         can.drawText(String.valueOf(index), xLoc + RADIUS - 4, centre + 6, paint);
 
         //drawSmallCircle(8, 331, "Assess the level of risk", 3);
@@ -441,18 +457,27 @@ public class Take5PdfDocument {
         mTimeString = timeformat.format(date);
     }
 
-    public void drawRiskElement(int height, Take5RiskElement element) {
+    public float drawRiskElement(int height, Take5RiskElement element) {
+        final float singleLineHeight = 12.5f;
+        float totalItemHeight;
+
         TextPaint textPaint = new TextPaint();
         textPaint.setTypeface(roboto);
-        textPaint.setTextSize(FONT14);
+        textPaint.setTextSize(FONT11);
         textPaint.setColor(Color.BLACK);
 
-        StaticLayout one = new StaticLayout(element.getOne(), textPaint, 230, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        StaticLayout one = new StaticLayout(element.getOne(), textPaint, 235, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         StaticLayout rating = new StaticLayout(element.getRating().toString(), textPaint, 100, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         StaticLayout two = new StaticLayout(element.getTwo(), textPaint, 250, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
 
+        if (one.getLineCount() > two.getLineCount()) {
+            totalItemHeight = singleLineHeight * one.getLineCount();
+        } else {
+            totalItemHeight = singleLineHeight * two.getLineCount();
+        }
+
         can.save();
-        can.translate(30, height);
+        can.translate(15, height);
         one.draw(can);
         can.restore();
 
@@ -465,5 +490,7 @@ public class Take5PdfDocument {
         can.translate(270, height);
         rating.draw(can);
         can.restore();
+
+        return totalItemHeight;
     }
 }

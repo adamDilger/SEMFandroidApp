@@ -13,14 +13,6 @@
 
     <TextView
         style="@style/home_label"
-        android:id="@+id/home_button_protect"
-        android:text="@string/home_protect"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        />
-    <TextView
-        style="@style/home_label"
         android:id="@+id/home_button_take5"
         android:text="@string/home_take5"
         android:layout_width="match_parent"
@@ -47,14 +39,6 @@
         style="@style/home_label"
         android:id="@+id/home_button_site_instruct"
         android:text="@string/home_site_inctruct"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        />
-    <TextView
-        style="@style/home_label"
-        android:id="@+id/home_button_non_conform"
-        android:text="@string/home_non_conform"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"

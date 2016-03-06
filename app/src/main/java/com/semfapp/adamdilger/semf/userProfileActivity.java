@@ -34,8 +34,6 @@ public class userProfileActivity extends AppCompatActivity {
     public static String NAME = "name";
     public static String CONTACT_NUM = "contactNum";
     public static String EMAIL = "email";
-    public static String SUPERVISOR_NAME = "supName";
-    public static String SUPERVISOR_EMAIL = "supEmail";
     public static String CC_HAZARD = "ccHazard";
     public static String CC_INCEDENT = "ccIncedent";
     public static String CC_PROTECT = "ccProtect";
@@ -43,8 +41,8 @@ public class userProfileActivity extends AppCompatActivity {
 
 
 
-    EditText name, contactNum, email, supName, supEmail, ccHazard, ccIncedent, ccProtect, ccTake5;
-    Button saveSettingButton, clearSettingsButton;
+    EditText name, contactNum, email, ccHazard, ccTake5;
+    Button saveSettingButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,31 +55,27 @@ public class userProfileActivity extends AppCompatActivity {
 
         final SharedPreferences sharedPreferences = getSharedPreferences(USER_SETTINGS_SHARED_PREF, MODE_PRIVATE);
 
+        System.out.println(sharedPreferences.getString(CC_HAZARD, "Def"));
+        System.out.println(sharedPreferences.getString(CC_TAKE5, "Def"));
 
         //Create EditText fields
         saveSettingButton = (Button)findViewById(R.id.up_button_save);
-        clearSettingsButton = (Button)findViewById(R.id.up_button_clear);
         name = (EditText)findViewById(R.id.up_text_name);
         contactNum = (EditText)findViewById(R.id.up_text_contact_num);
         email = (EditText)findViewById(R.id.up_text_email);
-        supName = (EditText)findViewById(R.id.up_text_sup_name);
-        supEmail = (EditText)findViewById(R.id.up_text_sup_email);
         ccHazard = (EditText)findViewById(R.id.up_text_cc_hazard);
-        ccIncedent = (EditText)findViewById(R.id.up_text_cc_incedent);
-        ccProtect = (EditText)findViewById(R.id.up_text_cc_protect);
         ccTake5 = (EditText)findViewById(R.id.up_text_cc_take5);
 
         //set Text to values in SharedPreferences
         name.setText(sharedPreferences.getString(NAME, ""));
         contactNum.setText(sharedPreferences.getString(CONTACT_NUM,""));
         email.setText(sharedPreferences.getString(EMAIL,""));
-        supName.setText(sharedPreferences.getString(SUPERVISOR_NAME,""));
-        supEmail.setText(sharedPreferences.getString(SUPERVISOR_EMAIL,""));
         ccHazard.setText(sharedPreferences.getString(CC_HAZARD,""));
-        ccIncedent.setText(sharedPreferences.getString(CC_INCEDENT,""));
-        ccProtect.setText(sharedPreferences.getString(CC_PROTECT,""));
         ccTake5.setText(sharedPreferences.getString(CC_TAKE5, ""));
 
+        //set disabled textFields
+        ccHazard.setEnabled(false);
+        ccTake5.setEnabled(false);
 
         //Button Saves new values to SharedPreferences
         saveSettingButton.setOnClickListener(new View.OnClickListener() {
@@ -92,11 +86,7 @@ public class userProfileActivity extends AppCompatActivity {
                 editor.putString(NAME, name.getText().toString());
                 editor.putString(CONTACT_NUM, contactNum.getText().toString());
                 editor.putString(EMAIL, email.getText().toString());
-                editor.putString(SUPERVISOR_NAME, supName.getText().toString());
-                editor.putString(SUPERVISOR_EMAIL, supEmail.getText().toString());
                 editor.putString(CC_HAZARD, ccHazard.getText().toString());
-                editor.putString(CC_INCEDENT, ccIncedent.getText().toString());
-                editor.putString(CC_PROTECT, ccProtect.getText().toString());
                 editor.putString(CC_TAKE5, ccTake5.getText().toString());
 
                 editor.commit();
@@ -104,55 +94,6 @@ public class userProfileActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "User Settings Saved", Toast.LENGTH_SHORT).show();
 
                 closeActivity();
-
-            }
-        });
-        clearSettingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(userProfileActivity.this);
-                builder.setMessage("Are you sure you want to clear all user data?");
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                        editor.remove(NAME);
-                        editor.remove(CONTACT_NUM);
-                        editor.remove(EMAIL);
-                        editor.remove(SUPERVISOR_NAME);
-                        editor.remove(SUPERVISOR_EMAIL);
-                        editor.remove(CC_HAZARD);
-                        editor.remove(CC_INCEDENT);
-                        editor.remove(CC_PROTECT);
-                        editor.remove(CC_TAKE5);
-
-                        editor.commit();
-
-                        name.setText("");
-                        contactNum.setText("");
-                        email.setText("");
-                        supName.setText("");
-                        supEmail.setText("");
-                        ccHazard.setText("");
-                        ccIncedent.setText("");
-                        ccProtect.setText("");
-                        ccTake5.setText("");
-
-                        dialog.dismiss();
-
-                        Toast.makeText(getApplicationContext(), "User Settings Cleared", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
             }
         });
     }

@@ -20,12 +20,6 @@
         android:layout_height="wrap_content">
         <Button
             android:layout_weight="1"
-            android:id="@+id/up_button_clear"
-            android:text="Clear All"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <Button
-            android:layout_weight="1"
             android:id="@+id/up_button_save"
             android:text="Save"
             android:layout_width="wrap_content"
@@ -52,7 +46,7 @@
                 android:id="@+id/up_text_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
+                android:inputType="textCapWords"
                 />
             <TextView
                 android:paddingTop="5dp"
@@ -83,32 +77,6 @@
                 />
             <TextView
                 android:paddingTop="5dp"
-                android:id="@+id/up_label_sup_name"
-                android:text="@string/up_sup_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-            <EditText
-                android:id="@+id/up_text_sup_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                />
-            <TextView
-                android:paddingTop="5dp"
-                android:id="@+id/up_label_sup_email"
-                android:text="@string/up_sup_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-            <EditText
-                android:id="@+id/up_text_sup_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                />
-            <TextView
-                android:paddingTop="5dp"
                 android:id="@+id/up_label_cc_hazard"
                 android:text="@string/up_cc_hazard"
                 android:layout_width="match_parent"
@@ -116,32 +84,6 @@
                 />
             <EditText
                 android:id="@+id/up_text_cc_hazard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                />
-            <TextView
-                android:paddingTop="5dp"
-                android:id="@+id/up_label_cc_incident"
-                android:text="@string/up_cc_incident"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-            <EditText
-                android:id="@+id/up_text_cc_incedent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                />
-            <TextView
-                android:paddingTop="5dp"
-                android:id="@+id/up_label_cc_protect"
-                android:text="@string/up_cc_protect"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-            <EditText
-                android:id="@+id/up_text_cc_protect"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"

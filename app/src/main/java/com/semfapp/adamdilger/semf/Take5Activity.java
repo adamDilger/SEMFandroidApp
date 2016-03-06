@@ -17,20 +17,22 @@ You should have received a copy of the GNU Affero General Public License along w
 
 package com.semfapp.adamdilger.semf;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 
 public class Take5Activity extends AbstractTabLayoutFragment {
 
@@ -113,34 +115,55 @@ public class Take5Activity extends AbstractTabLayoutFragment {
     }
 
     public void createPdf() {
-        PdfDocument document = pdfDocument.createDocument();
 
-        // write the document
-        String date = new SimpleDateFormat("dd-MM-yy").format(MainActivity.currentDate);
-        pdfAttatchment = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), date + " Take5.pdf");
+        //if all fields have not been entered, create an alertdialog
+        if (data.allFieldsFilled()) {
+            PdfDocument document = pdfDocument.createDocument();
 
-        FileOutputStream fos;
+            // write the document
+            String name = Emailer.getSubject(Emailer.TAKE_5_CODE, data.getEditTexts()[0]);
+            pdfAttatchment = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), name + ".pdf");
 
-        try {
-            pdfAttatchment.createNewFile();
-            fos = new FileOutputStream(pdfAttatchment);
-            document.writeTo(fos);
-            document.close();
-            fos.close();
-        } catch (Exception e) {
-            new Toast(getApplicationContext())
-                    .makeText(getApplicationContext(),
-                            "Error:\n" + e.toString(),
-                            Toast.LENGTH_SHORT)
-                    .show();
+            FileOutputStream fos;
+
+            try {
+//                pdfAttatchment.mkdirs();
+                pdfAttatchment.createNewFile();
+                fos = new FileOutputStream(pdfAttatchment);
+                document.writeTo(fos);
+                document.close();
+                fos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+
+                new Toast(getApplicationContext())
+                        .makeText(getApplicationContext(),
+                                "Error6:\n" + e.toString(),
+                                Toast.LENGTH_SHORT)
+                        .show();
+            }
+
+            //create email intent
+            Emailer emailer = new Emailer(getApplicationContext());
+            Intent emailIntent = emailer.emailAttatchmentIntent(Emailer.TAKE_5_CODE, pdfAttatchment, null, name);
+
+            //start email intent
+            startActivityForResult(Intent.createChooser(emailIntent, "Send email..."), Emailer.EMAILER_REQUEST_CODE);
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            builder.setTitle("Oops..");
+            builder.setMessage("Not all fields have been filled");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog dialog = builder.create();
+
+            dialog.show();
         }
-
-        //create email intent
-        Emailer emailer = new Emailer(getApplicationContext());
-        Intent emailIntent = emailer.emailAttatchmentIntent(Emailer.TAKE_5_CODE, pdfAttatchment, null);
-
-        //start email intent
-        startActivityForResult(Intent.createChooser(emailIntent, "Send email..."), Emailer.EMAILER_REQUEST_CODE);
     }
 
     @Override

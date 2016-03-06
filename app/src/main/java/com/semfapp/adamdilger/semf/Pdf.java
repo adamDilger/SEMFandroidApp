@@ -24,9 +24,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.annotation.Nullable;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Image;
@@ -53,7 +52,6 @@ import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by adamdilger on 18/11/2015.

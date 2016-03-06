@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private final int SITEINSTRUCTION = 4;
     private final int INCEDENT = 5;
 
-    TextView protectPlanText, hazardIdText, nonConformanceText, take5Text, siteInstructionText, incedentReport;
+    TextView hazardIdText, take5Text, siteInstructionText, incedentReport;
     public static Date currentDate;
     public static Pdf pdf;
 
@@ -55,9 +55,16 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setLogo(R.mipmap.semf_logo_icon);
         setSupportActionBar(toolbar);
 
+        //Set Default email values, these will remain unchanged
+        SharedPreferences sharedPreferences = getSharedPreferences(userProfileActivity.USER_SETTINGS_SHARED_PREF, MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(userProfileActivity.CC_HAZARD, "hazard@semf.com.au");
+        editor.putString(userProfileActivity.CC_TAKE5, "take5@semf.com.au");
+        editor.commit();
 
         //If First Open, open Tutorial Dialog
-        SharedPreferences sharedPreferences = getSharedPreferences(TutorialDialog.TUTORIAL_SHARED_PREF_CODE, MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(TutorialDialog.TUTORIAL_SHARED_PREF_CODE, MODE_PRIVATE);
 
         if (sharedPreferences.getBoolean(TutorialDialog.TUTORIAL_BOOLEAN_CODE, false) == false) {
             TutorialDialog tutorialDialog = new TutorialDialog();
@@ -71,16 +78,16 @@ public class MainActivity extends AppCompatActivity {
         currentDate = new Date();
         pdf = new Pdf();
 
-        protectPlanText = (TextView)findViewById(R.id.home_button_protect);
-        protectPlanText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!checkForUserData(PROTECTPLAN)) {
-                    Intent i = new Intent(getApplicationContext(), protectPlanActivity.class);
-                    startActivity(i);
-                }
-            }
-        });
+//        protectPlanText = (TextView)findViewById(R.id.home_button_protect);
+//        protectPlanText.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (!checkForUserData(PROTECTPLAN)) {
+//                    Intent i = new Intent(getApplicationContext(), protectPlanActivity.class);
+//                    startActivity(i);
+//                }
+//            }
+//        });
 
         hazardIdText = (TextView)findViewById(R.id.home_button_hazard);
         hazardIdText.setOnClickListener(new View.OnClickListener() {
@@ -91,17 +98,6 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(i);
                 }
 
-            }
-        });
-
-        nonConformanceText = (TextView)findViewById(R.id.home_button_non_conform);
-        nonConformanceText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!checkForUserData(NONCONFORMANCE)) {
-                    Intent i = new Intent(getApplicationContext(), NonConformanceActivity.class);
-                    startActivity(i);
-                }
             }
         });
 
@@ -230,17 +226,6 @@ public class MainActivity extends AppCompatActivity {
                     output = "Incedent Report";
                 }
                 break;
-        }
-
-        if (sharedPreferences.getString(userProfileActivity.SUPERVISOR_EMAIL, "") == "" ||
-                sharedPreferences.getString(userProfileActivity.SUPERVISOR_EMAIL, null) == null) {
-            failed = true;
-
-            if (output == "") {
-                output = "Supervisor Email";
-            } else {
-                output += " and supervisor email";
-            }
         }
 
         //if output has changed, one of the values is null
