@@ -122,7 +122,7 @@ public class Take5Activity extends AbstractTabLayoutFragment {
 
             // write the document
             String name = Emailer.getSubject(Emailer.TAKE_5_CODE, data.getEditTexts()[0]);
-            pdfAttatchment = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), name + ".pdf");
+            pdfAttatchment = new File(Environment.getExternalStorageDirectory(), name + ".pdf");
 
             FileOutputStream fos;
 
