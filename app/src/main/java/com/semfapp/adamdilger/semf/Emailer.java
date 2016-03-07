@@ -50,7 +50,7 @@ public class Emailer {
                 break;
         }
 
-        if (jobNumber != null) {
+        if (jobNumber != null && jobNumber != "") {
             return String.format("%s - %s - %s", date, jobType, jobNumber);
         } else {
             return String.format("%s - %s", date, jobType);

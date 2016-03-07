@@ -466,9 +466,19 @@ public class Take5PdfDocument {
         textPaint.setTextSize(FONT11);
         textPaint.setColor(Color.BLACK);
 
-        StaticLayout one = new StaticLayout(element.getOne(), textPaint, 235, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        String oneString = "";
+        String twoString = "";
+
+        if (element.getOne() != null) {
+            oneString = element.getOne();
+        }
+        if (element.getTwo() != null) {
+            twoString = element.getTwo();
+        }
+
+        StaticLayout one = new StaticLayout(oneString, textPaint, 235, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         StaticLayout rating = new StaticLayout(element.getRating().toString(), textPaint, 100, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-        StaticLayout two = new StaticLayout(element.getTwo(), textPaint, 250, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        StaticLayout two = new StaticLayout(twoString, textPaint, 250, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
 
         if (one.getLineCount() > two.getLineCount()) {
             totalItemHeight = singleLineHeight * one.getLineCount();

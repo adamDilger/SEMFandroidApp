@@ -44,7 +44,7 @@
         android:clickable="true"
         />
     <TextView
-        android:text="\u00A9 2016 Adam Dilger"
+        android:id="@+id/copyright_text"
         android:textSize="10sp"
         android:textColor="#c1c1c1"
         android:layout_weight="1"

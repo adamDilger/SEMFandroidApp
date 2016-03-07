@@ -21,6 +21,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
@@ -77,6 +78,24 @@ public class MainActivity extends AppCompatActivity {
         //create date object
         currentDate = new Date();
         pdf = new Pdf();
+
+        //copyright text setup. Add version number to end of string
+        TextView copyrightText = (TextView) findViewById(R.id.copyright_text);
+        String copyrightString = copyrightText.getText().toString();
+
+        String versionName = "";
+
+
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            versionName = pInfo.versionName;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String output = String.format("\u00a9 2016 (V%s)", copyrightString, versionName);
+        copyrightText.setText(output);
+
 
 //        protectPlanText = (TextView)findViewById(R.id.home_button_protect);
 //        protectPlanText.setOnClickListener(new View.OnClickListener() {

@@ -60,7 +60,7 @@ public class Take5CheckListAdapter extends RecyclerView.Adapter<Take5CheckListAd
         if (checkValue == Take5Data.CheckValue.YES) {
             holder.radioButtonYes.setChecked(true);
         } else if (checkValue == Take5Data.CheckValue.NO) {
-            holder.radioButtonNo.setChecked(false);
+            holder.radioButtonNo.setChecked(true);
         }
 
         //set checkbox listeners
