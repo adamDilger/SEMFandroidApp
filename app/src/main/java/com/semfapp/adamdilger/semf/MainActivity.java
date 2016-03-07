@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        String output = String.format("\u00a9 2016 (V%s)", copyrightString, versionName);
+        String output = String.format("\u00a9 2016 Adam Dilger (V%s)", copyrightString, versionName);
         copyrightText.setText(output);
 
 
