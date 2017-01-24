@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 
 import org.jsoup.Jsoup;
@@ -154,7 +155,7 @@ public class hazardIdActivity extends AbstractTabLayoutFragment implements Commu
         name = Emailer.getSubject(Emailer.HAZARD_ID_CODE, data.getProjectNumber());
 
         String filePath = MainActivity.pdf.createFilePath(this, name);
-        MainActivity.pdf.createPdfToFile(this, documentTemplate.html(), filePath, null);
+        MainActivity.pdf.createPdfToFile(this, documentTemplate.html(), filePath, data.getImageArray());
 
         pdfAttatchment = new File(filePath);
     }

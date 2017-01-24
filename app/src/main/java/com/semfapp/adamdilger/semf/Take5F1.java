@@ -51,7 +51,9 @@ public class Take5F1 extends Fragment {
         mEditTexts[3] = (EditText) v.findViewById(R.id.namesText);
 
 
+
         for (int x = 0; x < mEditTexts.length; x++) {
+            mEditTexts[x].setText(mEditTextValues[x]);
 
             final int index = x;
             mEditTexts[index].addTextChangedListener(new TextWatcher() {

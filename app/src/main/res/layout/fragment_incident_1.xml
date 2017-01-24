@@ -15,7 +15,7 @@
                 style="@style/incedent_view">
                 <TextView
                     style="@style/incedent_text_1"
-                    android:text="INCEDENT or NEAR MISS OCCURS" />
+                    android:text="INCIDENT or NEAR MISS OCCURS" />
             </LinearLayout>
 
             <View

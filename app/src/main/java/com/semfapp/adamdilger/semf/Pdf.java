@@ -26,6 +26,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Image;
@@ -116,7 +117,6 @@ public class Pdf {
     private void createPDFNew(String filePath, String htmlString, @Nullable ArrayList<ImageFile> images) {
 
         File file = null;
-
         try {
             file = new File(filePath);
 

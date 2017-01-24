@@ -26,7 +26,7 @@ public class IncidentReportActivity extends AbstractTabLayoutFragment {
 
     @Override
     String setToolbarTitle() {
-        return "Incedent Procedure";
+        return "Incident Procedure";
     }
 
     @Override

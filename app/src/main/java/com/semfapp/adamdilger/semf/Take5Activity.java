@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
@@ -48,6 +49,10 @@ public class Take5Activity extends AbstractTabLayoutFragment {
 
         data = Take5Data.get(this);
         pdfDocument = new Take5PdfDocument(getApplicationContext());
+
+        //get/set name from SharedPreferences
+        final SharedPreferences sharedPreferences = getSharedPreferences(userProfileActivity.USER_SETTINGS_SHARED_PREF, MODE_PRIVATE);
+        data.getEditTexts()[3] = sharedPreferences.getString(userProfileActivity.NAME, "");
 
         super.getViewPager().setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

@@ -17,13 +17,19 @@ You should have received a copy of the GNU Affero General Public License along w
 
 package com.semfapp.adamdilger.semf;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -43,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     private final int TAKE5 = 3;
     private final int SITEINSTRUCTION = 4;
     private final int INCEDENT = 5;
+
+    private static final int MY_PERMISSIONS_REQUEST = 123;
 
     TextView hazardIdText, take5Text, siteInstructionText, incedentReport;
     public static Date currentDate;
@@ -75,14 +83,15 @@ public class MainActivity extends AppCompatActivity {
             sharedPreferences.edit().putBoolean(TutorialDialog.TUTORIAL_BOOLEAN_CODE, true).commit();
         }
 
+        //CHECK FOR STORAGE AND CAMERA PERMISSIONS
+        checkPermissionsGranted();
+
         //create date object
         currentDate = new Date();
         pdf = new Pdf();
 
         //copyright text setup. Add version number to end of string
         TextView copyrightText = (TextView) findViewById(R.id.copyright_text);
-        String copyrightString = copyrightText.getText().toString();
-
         String versionName = "";
 
 
@@ -93,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        String output = String.format("\u00a9 2016 Adam Dilger (V%s)", copyrightString, versionName);
+        String output = String.format("\u00a9 2016 Adam Dilger (V%s)", versionName);
         copyrightText.setText(output);
 
 
@@ -254,5 +263,75 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return failed;
+    }
+
+    private void checkPermissionsGranted() {
+
+        //if any of the permissions fail, request permissions
+        if (
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED
+                ) {
+
+            //request permissions
+            ActivityCompat.requestPermissions(this,
+                    new String[]{
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.CAMERA
+                    },
+                    MY_PERMISSIONS_REQUEST);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                    Snackbar.make(hazardIdText, "Permissions Granted!", Snackbar.LENGTH_SHORT).show();
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+
+                    AlertDialog alertDialog = new AlertDialog.Builder(this)
+                            .setMessage("Permissions are required for this application to run...")
+                            .setTitle("Application unable to run")
+                            .setPositiveButton("Grant Permissions", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    checkPermissionsGranted();
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            })
+                            .create();
+                    alertDialog.show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 }

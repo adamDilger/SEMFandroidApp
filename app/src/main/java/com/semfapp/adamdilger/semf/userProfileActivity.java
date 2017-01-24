@@ -55,9 +55,6 @@ public class userProfileActivity extends AppCompatActivity {
 
         final SharedPreferences sharedPreferences = getSharedPreferences(USER_SETTINGS_SHARED_PREF, MODE_PRIVATE);
 
-        System.out.println(sharedPreferences.getString(CC_HAZARD, "Def"));
-        System.out.println(sharedPreferences.getString(CC_TAKE5, "Def"));
-
         //Create EditText fields
         saveSettingButton = (Button)findViewById(R.id.up_button_save);
         name = (EditText)findViewById(R.id.up_text_name);
