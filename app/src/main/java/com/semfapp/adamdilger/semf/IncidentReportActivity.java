@@ -36,13 +36,13 @@ public class IncidentReportActivity extends AbstractTabLayoutFragment {
     Fragment getFragmentAtIndex(int index) {
         switch (index) {
             case 0:
-                return new FragmentPage(R.layout.fragment_incident_1);
+                return FragmentPage.getInstance(R.layout.fragment_incident_1);
             case 1:
-                return new FragmentPageText(R.layout.fragment_incident_2,R.string.incident_html1);
+                return FragmentPageText.getInstance(R.layout.fragment_incident_2,R.string.incident_html1);
             case 2:
-                return new FragmentPageText(R.layout.fragment_incident_2,R.string.incident_html2);
+                return FragmentPageText.getInstance(R.layout.fragment_incident_2,R.string.incident_html2);
             case 3:
-                return new FragmentPageText(R.layout.fragment_incident_2,R.string.incident_html3);
+                return FragmentPageText.getInstance(R.layout.fragment_incident_2,R.string.incident_html3);
             default:
                 return null;
         }
@@ -53,31 +53,42 @@ public class IncidentReportActivity extends AbstractTabLayoutFragment {
         return TOTAL_PAGES;
     }
 
-    class FragmentPage extends Fragment {
-        int layout;
+    public static class FragmentPage extends Fragment {
+        public static FragmentPage getInstance(int layout) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("layout", layout);
 
-        public FragmentPage(int layout) {
-            this.layout = layout;
+            FragmentPage fragmentPage = new FragmentPage();
+            fragmentPage.setArguments(bundle);
+            return fragmentPage;
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            return inflater.inflate(layout, null);
+            return inflater.inflate(
+                    getArguments().getInt("layout", R.layout.fragment_incident_1),
+                    null);
         }
     }
 
-    class FragmentPageText extends FragmentPage {
+    public static class FragmentPageText extends Fragment {
 
-        int string;
+        public static FragmentPageText getInstance(int layout, int string) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("layout", layout);
+            bundle.putInt("string", string);
 
-        public FragmentPageText(int layout,int string) {
-            super(layout);
-
-            this.string = string;
+            FragmentPageText fragmentPage = new FragmentPageText();
+            fragmentPage.setArguments(bundle);
+            return fragmentPage;
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+            int layout = getArguments().getInt("layout", R.layout.fragment_incident_1);
+            int string = getArguments().getInt("string", android.R.string.unknownName);
+
             View v = inflater.inflate(layout, null);
 
             WebView webView = (WebView)v.findViewById(R.id.webView);
