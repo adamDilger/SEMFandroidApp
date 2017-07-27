@@ -8,9 +8,6 @@
         android:id="@+id/risk_matrix_image"
         android:src="@drawable/risk_matrix"
         android:layout_height="200dp"
-        android:layout_width="match_parent"
-        >
-
-    </com.semfapp.adamdilger.semf.TouchImageView>
+        android:layout_width="match_parent"/>
 
 </FrameLayout>

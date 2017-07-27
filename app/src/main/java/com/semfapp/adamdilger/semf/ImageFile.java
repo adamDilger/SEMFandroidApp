@@ -60,7 +60,6 @@ public class ImageFile {
                 bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] byteArray = stream.toByteArray();
 
-
                 image = Image.getInstance(byteArray);
 //                image = Image.getInstance(path);
             } catch (Exception e) {}
@@ -81,7 +80,7 @@ public class ImageFile {
                 exifInterface = new ExifInterface(filePath);
 
                 if (exifInterface.getAttributeInt(
-                        ExifInterface.TAG_ORIENTATION, 1) == ExifInterface.ORIENTATION_ROTATE_90){
+                        ExifInterface.TAG_ORIENTATION, 1) == ExifInterface.ORIENTATION_ROTATE_90) {
                     rotation = 90;
                 } else if (exifInterface.getAttributeInt(
                         ExifInterface.TAG_ORIENTATION, 1) == ExifInterface.ORIENTATION_ROTATE_180) {
@@ -100,6 +99,7 @@ public class ImageFile {
             BitmapFactory.decodeFile(filePath, options);
             float srcWidth = options.outWidth;
             float srcHeight = options.outHeight;
+
             int inSampleSize = 1;
             if (srcHeight > destHeight || srcWidth > destWidth) {
                 if (srcWidth > srcHeight) {
@@ -140,6 +140,7 @@ public class ImageFile {
                     inSampleSize = Math.round(srcWidth / destWidth);
                 }
             }
+
             options = new BitmapFactory.Options();
             options.inSampleSize = inSampleSize;
 

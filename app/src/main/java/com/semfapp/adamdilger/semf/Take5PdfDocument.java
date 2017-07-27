@@ -18,21 +18,32 @@ You should have received a copy of the GNU Affero General Public License along w
 package com.semfapp.adamdilger.semf;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
+import android.media.Image;
+import android.support.v4.graphics.BitmapCompat;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.util.Log;
 import android.util.TypedValue;
 import android.widget.TextView;
 
 import com.semfapp.adamdilger.semf.Take5Data.CheckBoxData;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,6 +53,8 @@ import java.util.Date;
  * Created by Adam on 12/07/2015.
  */
 public class Take5PdfDocument {
+    private static final String TAG = "Take5PdfDocument";
+
     //point values for PDF drawing
     private final int A4_WIDTH = 595;
     private final int A4_HEIGHT = 842;
@@ -80,7 +93,7 @@ public class Take5PdfDocument {
         FONT14 = 13;
         FONT16 = 15;
 
-        Take5Data d = Take5Data.get(appContext.getApplicationContext());
+        Take5Data d = Take5Data.get(appContext);
 
         mCheckBoxSectionOne = d.getSectionOneCheckBoxs();
         mCheckBoxSectionTwo = d.getSectionTwoCheckBoxs();
@@ -290,8 +303,72 @@ public class Take5PdfDocument {
         // finish the page
         document.finishPage(page);
 
+        int imagePageCount = 2;
+
+        for (Take5RiskElement risk : mRiskElements) {
+
+            if (risk.imagePath != null) {
+
+                // crate a page description
+                PdfDocument.PageInfo pageInfo1 = new PdfDocument.PageInfo.Builder(A4_WIDTH, A4_HEIGHT, imagePageCount).create();
+
+                PdfDocument.Page imagePage = document.startPage(pageInfo1);
+                Canvas canvas = imagePage.getCanvas();
+
+                try {
+
+                    Bitmap original = BitmapFactory.decodeFile(risk.imagePath);
+
+                    Bitmap b = resize(original, canvas.getWidth() - 100, canvas.getHeight() - 100);
+                    canvas.drawBitmap(b, 50, 60, new Paint());
+//                    canvas.drawText(risk.getOne(), 50, 40, new Paint());
+
+                    Path textPath = new Path();
+                    textPath.moveTo(50, 50);
+                    textPath.lineTo(canvas.getWidth() - 100, 50);
+
+                    canvas.drawTextOnPath(risk.getOne(), textPath, 0, 0, new Paint());
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                document.finishPage(imagePage);
+
+                imagePageCount++;
+
+                new File(risk.imagePath).delete();
+            }
+        }
+
         // add more pages
         return document;
+    }
+
+    private static Bitmap resize(Bitmap image, int maxWidth, int maxHeight) {
+
+        int width = image.getWidth();
+        int height = image.getHeight();
+        float ratioBitmap = (float) width / (float) height;
+        float ratioMax = (float) maxWidth / (float) maxHeight;
+
+        Log.d(TAG, "resize: " + String.format("width: %d, height: %d, ratioBitmap: %f, ratioMax: %f", width, height, ratioBitmap, ratioMax));
+
+        int finalWidth = maxWidth;
+        int finalHeight = maxHeight;
+        if (ratioMax > 1) {
+            finalWidth = (int) ((float)maxHeight * ratioBitmap);
+        } else {
+            finalHeight = (int) ((float)maxWidth / ratioBitmap);
+        }
+
+        if (finalHeight > maxHeight) {
+            finalWidth = (int) ((float) maxHeight * ratioBitmap);
+            finalHeight = maxHeight;
+        }
+
+        image = Bitmap.createScaledBitmap(image, finalWidth, finalHeight, true);
+        return image;
     }
 
     /**

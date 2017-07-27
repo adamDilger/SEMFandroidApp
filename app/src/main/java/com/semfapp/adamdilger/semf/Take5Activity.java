@@ -18,12 +18,14 @@ You should have received a copy of the GNU Affero General Public License along w
 package com.semfapp.adamdilger.semf;
 
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
@@ -33,9 +35,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 
 public class Take5Activity extends AbstractTabLayoutFragment {
+    private static final String TAG = "Take5Activity";
 
     private Take5PdfDocument pdfDocument;
     private File pdfAttatchment;
@@ -57,7 +61,7 @@ public class Take5Activity extends AbstractTabLayoutFragment {
         super.getViewPager().setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                if (position == 1) {
+                if (position == 1 && getCurrentFocus() != null) {
                     imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 }
             }
@@ -141,19 +145,35 @@ public class Take5Activity extends AbstractTabLayoutFragment {
             } catch (Exception e) {
                 e.printStackTrace();
 
-                new Toast(getApplicationContext())
-                        .makeText(getApplicationContext(),
-                                "Error6:\n" + e.toString(),
-                                Toast.LENGTH_SHORT)
+                Toast.makeText(this, "Error6:\n" + e.toString(), Toast.LENGTH_SHORT)
                         .show();
             }
 
-            //create email intent
+//            //create email intent
             Emailer emailer = new Emailer(getApplicationContext());
             Intent emailIntent = emailer.emailAttatchmentIntent(Emailer.TAKE_5_CODE, pdfAttatchment, null, name);
 
             //start email intent
             startActivityForResult(Intent.createChooser(emailIntent, "Send email..."), Emailer.EMAILER_REQUEST_CODE);
+
+
+            //TO PREVIEW DOCUMENT
+
+//            Intent target = new Intent(Intent.ACTION_VIEW);
+//            target.setDataAndType(Uri.fromFile(pdfAttatchment),"application/pdf");
+//            target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//
+//            Intent intent = Intent.createChooser(target, "Open File");
+//
+//
+//            Log.d(TAG, "createPdf: fileSize: " + pdfAttatchment.length() + " bytes");
+//            try {
+//                startActivity(intent);
+//            } catch (ActivityNotFoundException e) {
+//                // Instruct the user to install a PDF reader here, or something
+//
+//            }
+
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 

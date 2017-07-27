@@ -20,22 +20,27 @@ package com.semfapp.adamdilger.semf;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
  * Created by adamdilger on 23/11/2015.
  */
 public class Take5F4 extends ListFragment {
+    private static final String TAG = "Take5F4";
 
     public final int REQUEST_EDIT_ITEM = 0;
     public final int REQUEST_ADD_ITEM = 1;
@@ -64,11 +69,8 @@ public class Take5F4 extends ListFragment {
         mAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fm = getActivity()
-                        .getSupportFragmentManager();
-                Take5AddElementDialog dialog = Take5AddElementDialog.newInstance();
-                dialog.setTargetFragment(Take5F4.this, REQUEST_ADD_ITEM);
-                dialog.show(fm, "datedialog");
+                Intent i = new Intent(getActivity(), Take5RiskElementActivity.class);
+                startActivityForResult(i, 123);
             }
         });
 
@@ -78,41 +80,67 @@ public class Take5F4 extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         Take5RiskElement c = ((ListAdapter)getListAdapter()).getItem(position);
 
-        FragmentManager fm = getActivity()
-                .getSupportFragmentManager();
-        Take5EditElementDialog dialog = Take5EditElementDialog.newInstance(position, c.getOne(), c.mTwo, c.getRating().toString());
-        dialog.setTargetFragment(Take5F4.this, REQUEST_EDIT_ITEM);
-        dialog.show(fm, "datedialog");
+        Intent i = new Intent(getActivity(), Take5RiskElementActivity.class);
+
+        i.putExtra(Take5RiskElementActivity.POS_EXTRA, position);
+        i.putExtra(Take5RiskElementActivity.ONE_EXTRA, c.getOne());
+        i.putExtra(Take5RiskElementActivity.RATING_EXTRA, c.getRating().toString());
+        i.putExtra(Take5RiskElementActivity.TWO_EXTRA, c.mTwo);
+        i.putExtra(Take5RiskElementActivity.IMAGE_PATH_EXTRA, c.imagePath);
+
+        startActivityForResult(i, 123);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        int pos = data.getIntExtra(Take5EditElementDialog.POS_EXTRA, 0);
-        String one = data.getStringExtra(Take5EditElementDialog.ONE_EXTRA);
-        String rating = data.getStringExtra(Take5EditElementDialog.RATING_EXTRA);
-        String two = data.getStringExtra(Take5EditElementDialog.TWO_EXTRA);
+
+        if (data == null) {
+            Log.d(TAG, "onActivityResult: data == null");
+            return;
+        }
+
         if (resultCode == Activity.RESULT_OK) {
-            //edit/update item details
-            if (requestCode == REQUEST_EDIT_ITEM) {
-                mRiskElements.get(pos).set(one, two, Take5RiskElement.Rating.valueOf(rating));
-                ((ListAdapter) getListAdapter()).notifyDataSetChanged();
-            }
+            int pos = data.getIntExtra(Take5RiskElementActivity.POS_EXTRA, -1);
+            String one = data.getStringExtra(Take5RiskElementActivity.ONE_EXTRA);
+            String rating = data.getStringExtra(Take5RiskElementActivity.RATING_EXTRA);
+            String two = data.getStringExtra(Take5RiskElementActivity.TWO_EXTRA);
+            String imagePath = data.getStringExtra(Take5RiskElementActivity.IMAGE_PATH_EXTRA);
 
-            //add new item
-            if (requestCode == REQUEST_ADD_ITEM) {
-                if (one != null || two  != null || rating != null) {
-                    mRiskElements.add(new Take5RiskElement(one, two, Take5RiskElement.Rating.valueOf(rating)));
+            Take5RiskElement element;
+
+            if (pos == -1) {
+                //new item
+                element = new Take5RiskElement(one, two, Take5RiskElement.Rating.NA);
+
+                if (rating != null) {
+                    if (!rating.equals("")) {
+                        element.mRating = Take5RiskElement.Rating.valueOf(rating);
+                    }
                 }
-                ((ListAdapter)getListAdapter()).notifyDataSetChanged();
+
+                mRiskElements.add(element);
+            } else {
+                //editing item
+                element = mRiskElements.get(pos);
+                element.set(one, two, Take5RiskElement.Rating.valueOf(rating));
+            }
+
+
+            element.imagePath = imagePath;
+
+        } else if (resultCode == Activity.RESULT_FIRST_USER) {
+            int pos = data.getIntExtra(Take5RiskElementActivity.POS_EXTRA, -1);
+            Log.d(TAG, "onActivityResult: Deleting" + String.format("pos: %d", pos));
+
+            //pos == -1 if item has not been added yet
+            //therefore just discard it
+            if (pos != -1) {
+                mRiskElements.remove(pos);
             }
         }
 
-        //delete pos item
-        if (resultCode == Activity.RESULT_FIRST_USER) {
-            mRiskElements.remove(pos);
-            ListAdapter listAdapter = (ListAdapter)getListAdapter();
-            listAdapter.notifyDataSetChanged();
-        }
+        //notify adapter of data change
+        ((ListAdapter)getListAdapter()).notifyDataSetChanged();
     }
 
     @Override
@@ -126,6 +154,7 @@ public class Take5F4 extends ListFragment {
         public ListAdapter(ArrayList<Take5RiskElement> elements) {
             super(getActivity(), 0, elements);
         }
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             // If we weren't given a view, inflate one
@@ -135,16 +164,23 @@ public class Take5F4 extends ListFragment {
             }
 
             // Configure the view for this Crime
+            TextView textOne = (TextView)convertView.findViewById(R.id.list_item_one);
+            TextView textTwo = (TextView)convertView.findViewById(R.id.list_item_risk);
+            TextView textThree = (TextView)convertView.findViewById(R.id.list_item_two);
+            View imageCount = convertView.findViewById(R.id.image_count_view);
+
             Take5RiskElement r = getItem(position);
-            TextView textOne =
-                    (TextView)convertView.findViewById(R.id.list_item_one);
+
             textOne.setText(r.getOne());
-            TextView textTwo =
-                    (TextView)convertView.findViewById(R.id.list_item_risk);
             textTwo.setText(r.getRating().toString());
-            TextView textThree =
-                    (TextView)convertView.findViewById(R.id.list_item_two);
             textThree.setText(r.getTwo());
+
+            if (r.imagePath != null) {
+                imageCount.setVisibility(View.VISIBLE);
+            } else {
+                imageCount.setVisibility(View.GONE);
+            }
+
             return convertView;
         }
     }

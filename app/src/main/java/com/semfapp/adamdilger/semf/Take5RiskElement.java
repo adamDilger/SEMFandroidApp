@@ -17,12 +17,16 @@ You should have received a copy of the GNU Affero General Public License along w
 
 package com.semfapp.adamdilger.semf;
 
+import java.io.File;
+
 /**
  * Created by adamdilger on 23/11/2015.
  */
 public class Take5RiskElement {
     String mOne, mTwo;
     Rating mRating;
+    String imagePath;
+
     enum Rating {
         LOW,
         MED,
@@ -34,6 +38,7 @@ public class Take5RiskElement {
         mOne = one;
         mTwo = two;
         mRating = rating;
+        imagePath = null;
     }
 
     public Rating getRating() {return mRating;}

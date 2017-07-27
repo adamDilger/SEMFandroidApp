@@ -1,22 +1,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
               android:orientation="vertical"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                tools:context="com.adamdilger.semfswms.EditElementDialog">
+                android:paddingTop="@dimen/activity_vertical_margin">
 
     <EditText
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_width="match_parent"
         android:inputType="textMultiLine|textCapSentences"
-        android:maxLines="5"
-        android:maxLength="150"
+        android:maxLength="250"
         android:id="@+id/element_text_one"
         android:hint="What are the hazards and risks?"
-        android:lines="2" />
+        android:layout_weight="1"/>
+
     <RadioGroup
         android:id="@+id/radioGroup"
         android:padding="10dp"
@@ -43,18 +42,30 @@
             android:layout_height="wrap_content" />
     </RadioGroup>
     <EditText
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_width="match_parent"
         android:inputType="textMultiLine|textCapSentences"
-        android:maxLength="150"
-        android:maxLines="5"
+        android:maxLength="250"
         android:id="@+id/element_text_two"
         android:hint="How will hazards and risks be controlled?"
         android:linksClickable="true"
-        android:lines="2" />
-    <Button
-        android:id="@+id/risk_matrix_button"
-        android:text="Open Risk Rating Matrix"
+        android:layout_weight="1"/>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/risk_matrix_button"
+            android:text="View Rating Matrix"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+        <Button
+            android:id="@+id/_"
+            android:text="Add Picture"
+            android:drawableLeft="@android:drawable/ic_menu_camera"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 </LinearLayout>

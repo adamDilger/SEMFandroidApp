@@ -176,7 +176,6 @@ public class Pdf {
                     float imgWidth = document.getPageSize().getWidth() - 100;
                     float imgHeight = document.getPageSize().getHeight() - 100;
 
-
                     cursor.scaleToFit(new Rectangle(imgWidth, imgHeight));
 
                     document.add(cursor);

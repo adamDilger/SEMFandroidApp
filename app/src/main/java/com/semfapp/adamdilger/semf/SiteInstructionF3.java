@@ -107,7 +107,7 @@ public class SiteInstructionF3 extends Fragment {
             photoFile = data.createImageFile();
             imageFileCurrentPath = photoFile.getPath();
         } catch (Exception ex) {
-            Toast.makeText(getActivity().getApplicationContext(), "Error: " + ex.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Error: " + ex.toString(), Toast.LENGTH_LONG).show();
             System.out.println(ex.toString());
         }
         // Continue only if the File was successfully created
