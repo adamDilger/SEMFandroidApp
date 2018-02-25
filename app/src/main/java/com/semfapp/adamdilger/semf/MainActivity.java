@@ -33,12 +33,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
@@ -102,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        String output = String.format("\u00a9 2016 Adam Dilger (V%s)", versionName);
+        String output = String.format("\u00a9 2017 Adam Dilger (V%s)", versionName);
         copyrightText.setText(output);
 
 
@@ -332,6 +334,16 @@ public class MainActivity extends AppCompatActivity {
 
             // other 'case' lines to check for other
             // permissions this app might request
+        }
+    }
+
+    private void deleteAllTempFiles() {
+        File directory = getFilesDir();
+        File[] files = directory.listFiles();
+        Log.d("Files", "Size: "+ files.length);
+        for (int i = 0; i < files.length; i++)
+        {
+            Log.d("Files", "FileName:" + files[i].getName());
         }
     }
 }

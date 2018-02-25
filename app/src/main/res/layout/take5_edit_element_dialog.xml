@@ -61,7 +61,7 @@
             android:layout_weight="1"
             android:layout_height="match_parent" />
         <Button
-            android:id="@+id/_"
+            android:id="@+id/add_picture_button"
             android:text="Add Picture"
             android:drawableLeft="@android:drawable/ic_menu_camera"
             android:layout_width="0px"
