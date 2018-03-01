@@ -34,8 +34,8 @@ public class userProfileActivity extends AppCompatActivity {
     public static String NAME = "name";
     public static String CONTACT_NUM = "contactNum";
     public static String EMAIL = "email";
-    public static String CC_HAZARD = "ccHazard";
-    public static String CC_INCEDENT = "ccIncedent";
+    public static String CC_HAZARD = "ccHazardCOVA";
+    public static String CC_INCEDENT = "ccIncedentCOVA";
     public static String CC_PROTECT = "ccProtect";
     public static String CC_TAKE5 = "ccTake5";
 

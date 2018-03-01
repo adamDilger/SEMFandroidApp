@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SEMF</string>
+    <string name="app_name">COVA</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_user_profile">userProfileActivity</string>
     <string name="title_activity_protect_plan">protectPlanActivity</string>
