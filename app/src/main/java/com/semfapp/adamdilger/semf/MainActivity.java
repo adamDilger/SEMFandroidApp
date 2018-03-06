@@ -70,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(userProfileActivity.USER_SETTINGS_SHARED_PREF, MODE_PRIVATE);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(userProfileActivity.CC_HAZARD, "hazard@covathinking.com.au");
-        editor.putString(userProfileActivity.CC_TAKE5, "take5@covathinking.com.au");
+        editor.putString(userProfileActivity.CC_HAZARD, "hazard@covathinking.com");
+        editor.putString(userProfileActivity.CC_TAKE5, "take5@covathinking.com");
         editor.commit();
 
         //If First Open, open Tutorial Dialog
